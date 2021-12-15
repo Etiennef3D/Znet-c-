@@ -1,0 +1,31 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 16
+VisualStudioVersion = 16.0.31313.79
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Znet", "Znet.csproj", "{3510E783-4B57-45E7-AA85-BC1EE3CCC91E}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ZnetTests", "..\ZnetTests\ZnetTests.csproj", "{67C0B584-593D-47E2-BC72-CF8FFE9A4088}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{3510E783-4B57-45E7-AA85-BC1EE3CCC91E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{3510E783-4B57-45E7-AA85-BC1EE3CCC91E}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{3510E783-4B57-45E7-AA85-BC1EE3CCC91E}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{3510E783-4B57-45E7-AA85-BC1EE3CCC91E}.Release|Any CPU.Build.0 = Release|Any CPU
+		{67C0B584-593D-47E2-BC72-CF8FFE9A4088}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{67C0B584-593D-47E2-BC72-CF8FFE9A4088}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{67C0B584-593D-47E2-BC72-CF8FFE9A4088}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{67C0B584-593D-47E2-BC72-CF8FFE9A4088}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {E1FDC659-FED3-4378-931B-C1D512EDFFAD}
+	EndGlobalSection
+EndGlobal
