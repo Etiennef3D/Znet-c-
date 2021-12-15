@@ -9,7 +9,7 @@ namespace Znet.Server
     /// Main server class. 
     /// Creates a socket, bin it to a port and listen for any message coming.
     /// </summary>
-    public class Server
+    public class ZServer
     {
         public volatile bool isActive = false;
 

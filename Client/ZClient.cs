@@ -8,7 +8,7 @@ using Znet.Utils;
 
 namespace Znet.Client
 {
-    public class Client
+    public class ZClient
     {
         public UInt16 NextDatagramIdToSend => m_NextDatagramIdToSend;
         public AckHandler ReceivedAcks => m_ReceivedAcks;
@@ -18,13 +18,15 @@ namespace Znet.Client
         private AckHandler m_ReceivedAcks;
         private AckHandler m_SentAcks;
         private EndPoint m_Address;
+        private ushort m_ListeningPort;
+        private ushort m_SendingPort;
         
         // Id of the next datagram to send
         private UInt16 m_NextDatagramIdToSend = 0;
 
         //private NetworkMessage m_Messages;
 
-        public Client()
+        public ZClient()
         {
             m_ReceivedAcks = new AckHandler();
             m_SentAcks = new AckHandler();
@@ -85,13 +87,15 @@ namespace Znet.Client
             //m_Messages.Add(_message);
         }
 
-        public bool Start(ushort _port)
+        public bool Start(ushort _sendingPort, ushort _listeningPort)
         {
             Release();
             m_Socket = new Socket(AddressFamily.InterNetwork, SocketType.Dgram, ProtocolType.Udp);
+            m_ListeningPort = _listeningPort;
+            m_SendingPort = _sendingPort;
 
             //Check if the socket has been created before going here
-            m_Address = new IPEndPoint(IPAddress.Any, _port);
+            m_Address = new IPEndPoint(IPAddress.Any, m_ListeningPort);
 
             try
             {
@@ -99,7 +103,7 @@ namespace Znet.Client
             }
             catch(Exception _ex)
             {
-                Console.WriteLine($"Couldn't bind this socket to the port : {_port}");
+                Console.WriteLine($"Couldn't bind this socket to the port : {_sendingPort}");
             }
 
             Console.WriteLine("Client is started");
@@ -138,7 +142,7 @@ namespace Znet.Client
             while (true)
             {
                 byte[] _buffer = new byte[Datagram.BUFFER_MAX_SIZE];
-                int receive = m_Socket.Receive(_buffer, Datagram.BUFFER_MAX_SIZE, SocketFlags.None);
+                int receive = m_Socket.Receive(_buffer);
                 
                 Console.WriteLine("Client received");
                 if(receive > 0)

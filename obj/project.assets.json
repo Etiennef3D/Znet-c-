@@ -8,19 +8,19 @@
     "net5.0": []
   },
   "packageFolders": {
-    "C:\\Users\\etienne.faivredarcie\\.nuget\\packages\\": {}
+    "C:\\Users\\etien\\.nuget\\packages\\": {}
   },
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "C:\\Users\\etienne.faivredarcie\\Desktop\\apptests\\Znet3\\Znet\\Znet.csproj",
+      "projectUniqueName": "C:\\Users\\etien\\Desktop\\Games\\Znet-c-\\Znet.csproj",
       "projectName": "Znet",
-      "projectPath": "C:\\Users\\etienne.faivredarcie\\Desktop\\apptests\\Znet3\\Znet\\Znet.csproj",
-      "packagesPath": "C:\\Users\\etienne.faivredarcie\\.nuget\\packages\\",
-      "outputPath": "C:\\Users\\etienne.faivredarcie\\Desktop\\apptests\\Znet3\\Znet\\obj\\",
+      "projectPath": "C:\\Users\\etien\\Desktop\\Games\\Znet-c-\\Znet.csproj",
+      "packagesPath": "C:\\Users\\etien\\.nuget\\packages\\",
+      "outputPath": "C:\\Users\\etien\\Desktop\\Games\\Znet-c-\\obj\\",
       "projectStyle": "PackageReference",
       "configFilePaths": [
-        "C:\\Users\\etienne.faivredarcie\\AppData\\Roaming\\NuGet\\NuGet.Config",
+        "C:\\Users\\etien\\AppData\\Roaming\\NuGet\\NuGet.Config",
         "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
       ],
       "originalTargetFrameworks": [
@@ -60,7 +60,7 @@
             "privateAssets": "all"
           }
         },
-        "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\5.0.203\\RuntimeIdentifierGraph.json"
+        "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\5.0.400\\RuntimeIdentifierGraph.json"
       }
     }
   }
