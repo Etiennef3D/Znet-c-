@@ -1,17 +1,17 @@
 {
   "format": 1,
   "restore": {
-    "C:\\Users\\etien\\Desktop\\Games\\Znet-c-\\Znet.csproj": {}
+    "C:\\Users\\etien\\Desktop\\Games\\Znet-c-\\Znet\\Znet.csproj": {}
   },
   "projects": {
-    "C:\\Users\\etien\\Desktop\\Games\\Znet-c-\\Znet.csproj": {
+    "C:\\Users\\etien\\Desktop\\Games\\Znet-c-\\Znet\\Znet.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "C:\\Users\\etien\\Desktop\\Games\\Znet-c-\\Znet.csproj",
+        "projectUniqueName": "C:\\Users\\etien\\Desktop\\Games\\Znet-c-\\Znet\\Znet.csproj",
         "projectName": "Znet",
-        "projectPath": "C:\\Users\\etien\\Desktop\\Games\\Znet-c-\\Znet.csproj",
+        "projectPath": "C:\\Users\\etien\\Desktop\\Games\\Znet-c-\\Znet\\Znet.csproj",
         "packagesPath": "C:\\Users\\etien\\.nuget\\packages\\",
-        "outputPath": "C:\\Users\\etien\\Desktop\\Games\\Znet-c-\\obj\\",
+        "outputPath": "C:\\Users\\etien\\Desktop\\Games\\Znet-c-\\Znet\\obj\\",
         "projectStyle": "PackageReference",
         "configFilePaths": [
           "C:\\Users\\etien\\AppData\\Roaming\\NuGet\\NuGet.Config",

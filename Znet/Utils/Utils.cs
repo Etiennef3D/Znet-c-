@@ -54,5 +54,15 @@ namespace Znet.Utils
 
             return UInt16.MaxValue - sLast + sNew + 1;
         }
+
+        public static int GetFixedHashCode(this string _text)
+        {
+            int _hash = 23;
+            foreach(char c in _text)
+            {
+                _hash = _hash * 31 + c;
+            }
+            return _hash;
+        }
     }
 }

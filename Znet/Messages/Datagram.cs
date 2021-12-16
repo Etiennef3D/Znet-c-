@@ -24,15 +24,20 @@ namespace Znet.Messages
             public UInt64 previousAck;
         }
 
+        public Datagram()
+        {
+            header = new Header();
+            payloadData = new byte[DataMaxSize];
+            headerData = new byte[HeaderSize];
+        }
+
         public static int HeaderSize = sizeof(UInt16) * 2 + sizeof(UInt64);
-        
-        //Below MTU value
         public static int BUFFER_MAX_SIZE = 1400;
         public static int DataMaxSize = BUFFER_MAX_SIZE - HeaderSize;
         public int dataSize = 0;
-        public Header header = new Header();
 
-        //We now by advance, than our packet can't be larger than DataMaxSize;
-        public byte[] data = new byte[DataMaxSize];
+        public Header header;
+        public byte[] payloadData;
+        public byte[] headerData;
     }
 }

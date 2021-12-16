@@ -12,7 +12,7 @@ namespace Znet
 
             ZClient client = new ZClient();
             client.Start(12345, 12300);
-            client.Send(new byte[] { 123 });
+            client.Connect();
         }
     }
 }
