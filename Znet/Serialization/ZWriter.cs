@@ -20,7 +20,7 @@ namespace Znet.Serialization
 
         //MTU - Header size
         private const int BUFFER_MAX_SIZE = 1400 - 12;
-        private byte[] _buffer = new byte[BUFFER_MAX_SIZE];
+        private readonly byte[] _buffer = new byte[BUFFER_MAX_SIZE];
         private int _currentWritePosition = 0;
         private int _initialWritePosition = 0;
         
@@ -28,15 +28,6 @@ namespace Znet.Serialization
         {
             _initialWritePosition = _writerPosition;
             _currentWritePosition = _initialWritePosition;
-        }
-        public void WriteHeader(UInt16 _datagramID, UInt16 _lastAcks, UInt64 _previousAck)
-        {
-            int _lastWritePosition = _currentWritePosition;
-            _currentWritePosition = 0;
-            WriteUInt16(_datagramID);
-            WriteUInt16(_lastAcks);
-            WriteUInt64(_previousAck);
-            _currentWritePosition = _lastWritePosition;
         }
 
         private void WriteByte(byte _byte)
@@ -65,6 +56,5 @@ namespace Znet.Serialization
             _buffer[_initialWritePosition + 1] = _weightArray[1];
             return _packetLength;
         }
-
     }
 }

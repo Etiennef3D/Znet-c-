@@ -1,17 +1,16 @@
-﻿using Znet.Client;
-using Znet.Server;
+﻿using System;
 
 namespace Znet
 {
-    class Program
+    public class Program
     {
         static void Main(string[] args)
         {
-            ZServer server = new ZServer();
-            server.Start(12345);
+            Znet.Server.ZServer _server = new Znet.Server.ZServer();
+            _server.Start(50004);
 
-            ZClient client = new ZClient();
-            client.Start(12345, 12300);
+            Znet.Client.ZClient client = new Znet.Client.ZClient();
+            client.Start(50004, 12300);
             client.Connect();
         }
     }

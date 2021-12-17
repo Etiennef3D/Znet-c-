@@ -1,8 +1,10 @@
 {
   "version": 2,
-  "dgSpecHash": "IbZnWone4O79xUeooxcwU2GhDLBGn/kT8CB6pZ9tktFPVSyAjNzvnLr8xQKGaqZb+mRmFz/TxR9LUy1mdhRVIA==",
+  "dgSpecHash": "JYZdXAHj48A/7iULRdn5BWhzxIYvU1K/rOx6W3r6EOLKvtTyqPY4hgDrJrXtqY/x7kFH5cyA0EMtayt08MZFuw==",
   "success": true,
   "projectFilePath": "C:\\Users\\etien\\Desktop\\Games\\Znet-c-\\Znet\\Znet.csproj",
-  "expectedPackageFiles": [],
+  "expectedPackageFiles": [
+    "C:\\Users\\etien\\.nuget\\packages\\sonaranalyzer.csharp\\8.33.0.40503\\sonaranalyzer.csharp.8.33.0.40503.nupkg.sha512"
+  ],
   "logs": []
 }

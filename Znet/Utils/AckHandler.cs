@@ -12,8 +12,6 @@ namespace Znet.Utils
         public UInt64 PreviousAckMask => m_PreviousAcks;
         public List<UInt16> NewAcks => GetNewAcks();
         public List<UInt16> Loss => m_Loss;
-        public bool LastAckIsNew => m_LastAckIsNew;
-
 
         private UInt16 m_LastAck = UInt16.MaxValue;
         private UInt64 m_PreviousAcks = UInt64.MaxValue;
@@ -26,7 +24,7 @@ namespace Znet.Utils
             m_LastAckIsNew = false;
 
             //Same as last ack, but can contains new informations in its mask
-            if(_newAck == m_LastAck)
+            if (_newAck == m_LastAck)
             {
                 //Mark new acks and update masks
                 m_NewAcks = (m_PreviousAcks & _previousAcks) ^ _previousAcks;
@@ -53,14 +51,14 @@ namespace Znet.Utils
                         }
                     }
                 }
-                if (bitsToShift >= 64)
+                if (bitsToShift >= 63)
                 {
                     bitsToShift = 63;
                     Utils.UnsetBit(ref m_PreviousAcks, 0);
                 }
 
                 m_PreviousAcks <<= bitsToShift;
-                
+
                 if (gap >= 64)
                 {
                     m_PreviousAcks = 0;
@@ -83,6 +81,8 @@ namespace Znet.Utils
 
                 m_LastAck = _newAck;
                 m_LastAckIsNew = true;
+
+                //Mark new acks and update masks
                 m_NewAcks = (m_PreviousAcks & _previousAcks) ^ _previousAcks;
                 m_PreviousAcks |= _previousAcks;
             }
@@ -99,15 +99,17 @@ namespace Znet.Utils
                     //Insert ack in the mask
                     byte ackBitInMask = (byte)(diff - 1);
                     Utils.SetBit(ref _previousAcks, ackBitInMask);
-
                     m_NewAcks = (m_PreviousAcks & _previousAcks) ^ _previousAcks;
                     m_PreviousAcks |= _previousAcks;
+                    
                 }
                 else
                 {
                     //Older ack than the left outer mask - ignore it.
                 }
             }
+            //string _prev = Convert.ToString((long)m_PreviousAcks, 2);
+            //Console.WriteLine(_prev);
         }
 
         public bool IsAcked(UInt16 _ack)
@@ -151,6 +153,7 @@ namespace Znet.Utils
                 return false;
             }
             byte bitPosition = (byte)(diff - 1);
+
             return Utils.HasBit(ref m_NewAcks, bitPosition);
         }
 

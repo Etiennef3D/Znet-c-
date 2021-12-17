@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Net;
 using System.Net.Sockets;
-using System.Text;
 using System.Threading;
 using Znet.Messages;
 using Znet.Serialization;
@@ -11,6 +10,7 @@ namespace Znet.Client
 {
     public class ZClient
     {
+        //Handle the socket.
         private Socket m_Socket;
         private EndPoint m_Address;
 
@@ -31,13 +31,6 @@ namespace Znet.Client
                 welcomeMessageValue = 4
             };
 
-            //for (int i = 0; i < 10; i++)
-            //{
-            //    Random rand = new Random();
-            //    int _randomTime = rand.Next(10, 200);
-            //    Thread.Sleep(_randomTime);
-            //    Send(_welcome);
-            //}
             Send(_welcome);
         }
 
@@ -80,28 +73,11 @@ namespace Znet.Client
         public void Send<T>(T _message) where T : ZNetworkMessage
         {
             Console.WriteLine("CLIENT send");
-            ZWriter _writer = new ZWriter();
-            UInt16 _packetLength = 0;
+            
+            byte[] _header = m_DatagramHandler.CreateDatagramHeader();
 
-            m_MessagePacker.PackMessage(ref _writer, _message, out _packetLength);
-            m_DatagramHandler.CreateDatagramHeader(ref _writer);
-
-            //Datagram header is 12
-
-            byte[] _dat = _writer.Buffer;
-
-            //StringBuilder _builder = new StringBuilder();
-            //for(int i = 0; i < _packetLength; i++)
-            //{
-            //    _builder.Append(_dat[i]);
-            //    _builder.Append("|");
-            //}
-            //Console.WriteLine(_builder);
-
-            //Is this socket should take the local end point or the remote end point ?
             IPAddress _ip = IPAddress.Parse("127.0.0.1");
-            m_Socket.SendTo(_dat, 0, _packetLength, SocketFlags.None, new IPEndPoint(_ip, m_SendingPort));
-            //Dispose writer or returns it to the pool
+            m_Socket.SendTo(_header, 0, Datagram.HeaderSize, SocketFlags.None, new IPEndPoint(_ip, m_SendingPort));
         }
 
         public void Receive()

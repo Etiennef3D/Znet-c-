@@ -18,7 +18,7 @@ namespace Znet.Messages
             public UInt16 ID;
 
             //Packet current acknowledgement
-            public UInt16 ack;
+            public UInt16 newAck;
 
             //Packet previous acknowledgement
             public UInt64 previousAck;
@@ -26,15 +26,21 @@ namespace Znet.Messages
 
         public Datagram()
         {
-            header = new Header();
+            header = new Header
+            {
+                ID = UInt16.MaxValue,
+                newAck = UInt16.MaxValue,
+                previousAck = UInt64.MaxValue
+            };
+
             payloadData = new byte[DataMaxSize];
             headerData = new byte[HeaderSize];
         }
 
-        public static int HeaderSize = sizeof(UInt16) * 2 + sizeof(UInt64);
-        public static int BUFFER_MAX_SIZE = 1400;
-        public static int DataMaxSize = BUFFER_MAX_SIZE - HeaderSize;
-        public int dataSize = 0;
+        public static readonly int HeaderSize = 12;
+        public static readonly int BUFFER_MAX_SIZE = 1400;
+        public static readonly int DataMaxSize = BUFFER_MAX_SIZE - HeaderSize;
+        public int dataSize;
 
         public Header header;
         public byte[] payloadData;

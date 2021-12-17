@@ -13,10 +13,26 @@ namespace ZnetTests.ZServer
         {
             Znet.Server.ZServer _server = new Znet.Server.ZServer();
             _server.Start(50002);
-            Assert.IsTrue(_server.isActive);
+            Assert.IsTrue(_server.IsActive);
 
             _server.Stop();
-            Assert.IsFalse(_server.isActive);
+            Assert.IsFalse(_server.IsActive);
+        }
+
+        [TestMethod]
+        public void Server_Receive_Message()
+        {
+            Znet.Server.ZServer _server = new Znet.Server.ZServer();
+            _server.Start(50005);
+
+            Assert.IsTrue(_server.IsActive);
+
+            Znet.Client.ZClient client = new Znet.Client.ZClient();
+            client.Start(50005, 12555);
+            client.Connect();
+
+            Thread.Sleep(1);
+            Assert.IsTrue(_server.DatagramHandler.ReceivedDatagrams == 1, $"Received datagram count is not 1: {_server.DatagramHandler.ReceivedDatagrams}");
         }
 
         [TestMethod]
@@ -25,7 +41,7 @@ namespace ZnetTests.ZServer
             Znet.Server.ZServer _server = new Znet.Server.ZServer();
             _server.Start(50004);
 
-            Assert.IsTrue(_server.isActive);
+            Assert.IsTrue(_server.IsActive);
 
             Znet.Client.ZClient client = new Znet.Client.ZClient();
             client.Start(50004, 12300);
@@ -36,6 +52,8 @@ namespace ZnetTests.ZServer
 
             Assert.IsTrue(_server.connectionManager.ConnectionCount == 1, $"Not 1: {_server.connectionManager.ConnectionCount}");
             Assert.IsTrue(_server.connectionManager.GetConnectionByID(1) != null);
+
+            Assert.IsTrue(_server.DatagramHandler.ReceivedDatagrams == 1);
         }
     }
 }

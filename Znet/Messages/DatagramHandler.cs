@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Text;
 using Znet.Serialization;
 using Znet.Utils;
 
@@ -7,34 +6,35 @@ namespace Znet.Messages
 {
     public class DatagramHandler
     {
-        public UInt16 NextDatagramIdToSend => m_NextDatagramIdToSend;
-        public AckHandler ReceivedAcks => m_ReceivedAcks;
-        public AckHandler SentAcks => m_SentAcks;
+        //public UInt16 NextDatagramIdToSend => m_NextDatagramIdToSend;
+        //public AckHandler ReceivedAcks => m_ReceivedAcks;
+        public int ReceivedDatagrams => m_ReceivedDatagrams;
 
-
-        private AckHandler m_ReceivedAcks;
-        private AckHandler m_SentAcks;
+        private readonly AckHandler m_ackHandler;
         private UInt16 m_NextDatagramIdToSend = 0;
+        private int m_ReceivedDatagrams;
 
         public DatagramHandler()
         {
-            m_ReceivedAcks = new AckHandler();
-            m_SentAcks = new AckHandler();
+            m_ackHandler = new AckHandler();
         }
 
-        public bool OnDatagramReceived(ref byte[] _buffer, ref ZReader _reader, out Datagram _datagram)
+        public bool OnDatagramReceived(ref byte[] _buffer)
         {
-            _datagram = new Datagram();
+            m_ReceivedDatagrams++;
 
-            _datagram.header.ID = _reader.ReadUInt16();
-            _datagram.header.ack = _reader.ReadUInt16();
-            _datagram.header.previousAck = _reader.ReadUInt64();
+            byte[] _idBuffer = new byte[2];
+            byte[] _maskBuffer = new byte[2];
 
-            Array.Copy(_buffer, _datagram.headerData, Datagram.HeaderSize);
+            Array.Copy(_buffer, _idBuffer, 2);
+            Array.Copy(_buffer, 2, _maskBuffer, 0, 2);
 
-            m_ReceivedAcks.Update(_datagram.header.ID, _datagram.header.previousAck);
+            UInt16 _id = BitConverter.ToUInt16(_idBuffer);
+            UInt16 previousAck = BitConverter.ToUInt16(_maskBuffer);
 
-            if (!m_ReceivedAcks.IsNewlyAcked(_datagram.header.ID))
+            m_ackHandler.Update(_id, previousAck);
+
+            if (!m_ackHandler.IsNewlyAcked(_id))
             {
                 Console.WriteLine("ERROR: Datagram is not newly acked");
                 return false;
@@ -42,13 +42,13 @@ namespace Znet.Messages
 
             return true;
 
-            
-            
-            
-            
-            
-            
-            
+
+
+
+
+
+
+
             //OnDataReceived(_datagram.payloadData);
 
             //m_SentAcks.Update(_datagram.header.ack, _datagram.header.previousAck);
@@ -78,17 +78,24 @@ namespace Znet.Messages
             }*/
         }
 
-        private void OnMessageReady(/*ref NetworkMessage _message*/)
+        public byte[] CreateDatagramHeader()
         {
-            //memcpy(&(msg->from), &mAddress, sizeof(mAddress));
-            //mClient.onMessageReceived(std::move(msg));
-            //m_Messages.Add(_message);
-        }
+            byte[] _datagramHeader = new byte[Datagram.HeaderSize];
 
-        public void CreateDatagramHeader(ref ZWriter _writer)
-        {
-            _writer.WriteHeader(m_NextDatagramIdToSend, m_ReceivedAcks.LastAck, m_ReceivedAcks.PreviousAckMask);
+            byte[] _nextDatagramToSend = BitConverter.GetBytes(m_NextDatagramIdToSend);
+            byte[] LastAck = BitConverter.GetBytes(m_ackHandler.LastAck);
+            byte[] PreviousAckMask = BitConverter.GetBytes(m_ackHandler.PreviousAckMask);
+
+            Array.Copy(_nextDatagramToSend, _datagramHeader, 2);
+            Array.Copy(LastAck, 0, _datagramHeader, 2, 2);
+            Array.Copy(PreviousAckMask, 0, _datagramHeader, 4, 8);
+
+            //Place the header at the head of the message
             ++m_NextDatagramIdToSend;
+
+            Console.WriteLine($"Create datagram header of size {_datagramHeader.Length}");
+
+            return _datagramHeader;
         }
     }
 }
