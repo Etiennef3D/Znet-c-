@@ -2,23 +2,23 @@
 
 namespace Znet.Messages.Packet
 {
-    struct Packet
+    public struct Packet
     {
-        struct Header
+        public struct Header
         {
-            UInt16 ID;
-            UInt16 Size;
-            PacketType Type;
+            public UInt16 ID;
+            public UInt16 Size;
+            public PacketType Type;
         }
 
-        static int PacketMaxSize = Datagram.DataMaxSize; 
-	    static int HeaderSize = 5;
-	    static int DataMaxSize = PacketMaxSize - HeaderSize; 
-	    static int MaxPacketsPerMessage = 32;
-	    static int MaxMessageSize = MaxPacketsPerMessage* DataMaxSize;
+        public static int PacketMaxSize = Datagram.DataMaxSize; 
+	    public static int HeaderSize = 5;
+	    public static int DataMaxSize = PacketMaxSize - HeaderSize;             //1388-5 = 1383
+	    public static int MaxPacketsPerMessage = 32;
+	    public static int MaxMessageSize = MaxPacketsPerMessage* DataMaxSize;
 
-        Header header;
-        byte[] data;
+        public Header header;
+        public byte[] data;
     }
 
     public enum PacketType
