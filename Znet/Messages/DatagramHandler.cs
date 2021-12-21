@@ -93,7 +93,7 @@ namespace Znet.Messages
             //Place the header at the head of the message
             ++m_NextDatagramIdToSend;
 
-            Console.WriteLine($"Create datagram header of size {_datagramHeader.Length}");
+            Console.WriteLine($"DATAGRAM: Create datagram header of size {_datagramHeader.Length}");
 
             return _datagramHeader;
         }

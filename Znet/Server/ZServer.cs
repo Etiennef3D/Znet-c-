@@ -20,7 +20,7 @@ namespace Znet.Server
         public ZConnectionManager connectionManager;
 
         private volatile bool isActive;
-        private byte[] _buffer;
+        private byte[] m_buffer;
         private int m_Port;
         private const int MAX_BUFFER_SIZE = 4096;
 
@@ -36,7 +36,7 @@ namespace Znet.Server
             connectionManager = new ZConnectionManager();
             m_ReceivingQueue = new DatagramReceivingQueue();
 
-            _buffer = new byte[MAX_BUFFER_SIZE];
+            m_buffer = new byte[MAX_BUFFER_SIZE];
             m_Socket = new Socket(AddressFamily.InterNetwork, SocketType.Dgram, ProtocolType.Udp);
 
             Thread _receivingQueueThread = new Thread(() =>
@@ -58,20 +58,20 @@ namespace Znet.Server
 
         public void Listen()
         {
-            Console.WriteLine("Server listening...");
+            Console.WriteLine("SERVER: listening...");
             IsActive = true;
             
             Thread udpThread = new Thread(new ThreadStart( () => {
                 while (IsActive)
                 {
-                    int res = m_Socket.Receive(_buffer);
-                    Console.WriteLine($"SERVER Received packet of size {res}");
+                    int res = m_Socket.Receive(m_buffer);
+                    Console.WriteLine($"SERVER: Received packet of size {res}");
 
                     if (res > 0)
                     {
-                        if (m_DatagramHandler.OnDatagramReceived(ref _buffer))
+                        if (m_DatagramHandler.OnDatagramReceived(ref m_buffer))
                         {
-                            Console.WriteLine("Send datagram to receiving queue");
+                            Console.WriteLine("SERVER: Send datagram to receiving queue");
                         }
                     }
                     else
@@ -95,7 +95,7 @@ namespace Znet.Server
 
         public void Stop()
         {
-            Console.WriteLine("Server stopped.");
+            Console.WriteLine("SERVER: Server stopped.");
             IsActive = false;
         }
     }

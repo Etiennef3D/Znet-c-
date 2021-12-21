@@ -1,6 +1,4 @@
-﻿using System;
-
-namespace Znet
+﻿namespace Znet
 {
     public class Program
     {

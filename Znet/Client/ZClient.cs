@@ -3,7 +3,6 @@ using System.Net;
 using System.Net.Sockets;
 using System.Threading;
 using Znet.Messages;
-using Znet.Serialization;
 using static Znet.Messages.SystemMessages;
 
 namespace Znet.Client
@@ -58,7 +57,7 @@ namespace Znet.Client
             }
             catch(Exception _ex)
             {
-                Console.WriteLine($"Couldn't bind this socket to the port : {_sendingPort} : {_ex}");
+                Console.WriteLine($"CLIENT: Couldn't bind this socket to the port : {_sendingPort} : {_ex}");
             }
 
             Thread _thread = new Thread(new ThreadStart(() =>
@@ -72,7 +71,7 @@ namespace Znet.Client
 
         public void Send<T>(T _message) where T : ZNetworkMessage
         {
-            Console.WriteLine("CLIENT send");
+            Console.WriteLine("CLIENT: send");
             
             byte[] _header = m_DatagramHandler.CreateDatagramHeader();
 
@@ -88,19 +87,19 @@ namespace Znet.Client
                 byte[] _buffer = new byte[Datagram.BUFFER_MAX_SIZE];
                 int receive = m_Socket.Receive(_buffer);
                 
-                Console.WriteLine($"CLIENT received a message of size {receive}");
+                Console.WriteLine($"CLIENT: received a message of size {receive}");
                 if(receive > 0)
                 {
                     if(receive > Datagram.HeaderSize)
                     {
-                        Console.WriteLine($"Receiving data: {receive} octets");
+                        Console.WriteLine($"CLIENT: Receiving data: {receive} octets");
                         //Receive datagram
                         //OnDatagramReceived()
                     }
                     else
                     {
                         //Unexpected datagram
-                        Console.WriteLine("Unexpected datagram has been received");
+                        Console.WriteLine("CLIENT: Unexpected datagram has been received");
                     }
                 }
                 else
@@ -108,7 +107,7 @@ namespace Znet.Client
                     if(receive < 0)
                     {
                         //Error handling
-                        Console.WriteLine("Error has occured");
+                        Console.WriteLine("CLIENT: Error has occured");
                     }
                     return;
                 }
