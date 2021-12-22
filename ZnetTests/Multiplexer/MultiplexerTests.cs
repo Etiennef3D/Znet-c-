@@ -8,35 +8,72 @@ namespace ZnetTests.Multiplexer
     public class MultiplexerTests
     {
         [TestMethod]
-        public void QueueMessage()
+        public void QueuingNormalMessages()
         {
             UnreliableMultiplexer _multiplexer = new UnreliableMultiplexer();
-            Assert.IsTrue(_multiplexer.m_Queue.Count == 0);
-            Assert.IsTrue(_multiplexer.m_NextID == 1);
-
-            //Queue a buffer of size 5
             byte[] _buffer = new byte[5];
-            _multiplexer.Queue(ref _buffer);
+            _multiplexer.QueueMessage(_buffer);
 
-            Assert.IsTrue(_multiplexer.m_Queue.Count == 1, $"Multiplexer queue count is : {_multiplexer.m_Queue.Count}");
-            Assert.IsTrue(_multiplexer.m_NextID == 2, $"Multiplexer next id: {_multiplexer.m_NextID}");
+            Assert.AreEqual(_multiplexer.m_Queue.Count, 1);
 
-            //Serialize a buffer of size 1388
-            byte[] _bigBuffer = new byte[Packet.PacketMaxSize];
-            int _size = _multiplexer.Serialize(ref _bigBuffer, Packet.PacketMaxSize);
-            Assert.IsTrue(_size == _buffer.Length, $"Size is {_size}. It should be {_buffer.Length}");
+            byte[] _secondBuffer = new byte[20];
+            _multiplexer.QueueMessage(_secondBuffer);
+
+            Assert.AreEqual(_multiplexer.m_Queue.Count, 2);
         }
 
         [TestMethod]
-        public void FragmentMessage()
+        public void QueuingBigMessages()
         {
             UnreliableMultiplexer _multiplexer = new UnreliableMultiplexer();
-            //Sending a fragmented message (3 fragments)
             byte[] _veryBigMessage = new byte[Packet.DataMaxSize * 3];
 
-            _multiplexer.Queue(ref _veryBigMessage);
+            _multiplexer.QueueMessage(_veryBigMessage);
 
             Assert.AreEqual(_multiplexer.m_Queue.Count, 3);
+            Assert.AreEqual(_multiplexer.m_NextID, 4);
+        }
+
+        [TestMethod]
+        public void SerializeNormalMessage()
+        {
+            byte[] _sendBuffer = new byte[1400];
+            UnreliableMultiplexer _multiplexer = new UnreliableMultiplexer();
+            int _dataLength = 5 + Packet.HeaderSize;
+            byte[] _payloadBuffer = new byte[5] { 1, 2, 3, 4, 5 };
+
+            _multiplexer.QueueMessage(_payloadBuffer);
+
+            int _serializedDataSize = _multiplexer.Serialize(ref _sendBuffer, _dataLength);
+
+            Assert.AreEqual(_serializedDataSize, _dataLength);
+        }
+
+        [TestMethod]
+        public void SerializeBigMessages()
+        {
+            byte[] _sendBuffer = new byte[Packet.PacketMaxSize];
+            UnreliableMultiplexer _multiplexer = new UnreliableMultiplexer();
+            byte[] _veryBigMessage = new byte[Packet.DataMaxSize * 3];
+            _multiplexer.QueueMessage(_veryBigMessage);
+
+            Assert.AreEqual(_multiplexer.m_Queue.Count, 3);
+            Assert.AreEqual(_multiplexer.m_NextID, 4);
+
+            //Make sure when we have 3 fragments, that the serialize method only return 1 message with a fragment
+            int _serializedDataSize = _multiplexer.Serialize(ref _sendBuffer, _sendBuffer.Length);
+            Assert.AreEqual(_serializedDataSize, Packet.PacketMaxSize);
+
+            //If we serialize again, we should have the exact same packet size
+            int _serializedDataSize2 = _multiplexer.Serialize(ref _sendBuffer, _sendBuffer.Length);
+            Assert.AreEqual(_serializedDataSize2, Packet.PacketMaxSize);
+
+            //And again the same size
+            int _serializedDataSize3 = _multiplexer.Serialize(ref _sendBuffer, _sendBuffer.Length);
+            Assert.AreEqual(_serializedDataSize3, Packet.PacketMaxSize);
+
+            //Now we should have an empty list
+            Assert.AreEqual(_multiplexer.m_Queue.Count, 0);
             Assert.AreEqual(_multiplexer.m_NextID, 4);
         }
     }
