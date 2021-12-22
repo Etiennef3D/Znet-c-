@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Diagnostics;
 using Znet.Messages.Packet;
+using Znet.Serialization;
 
 namespace Znet.Queue
 {
@@ -9,6 +10,8 @@ namespace Znet.Queue
     {
         public List<Packet> m_Queue = new List<Packet>();
         public UInt16 m_NextID = 1;
+
+        private ZWriter _writer = new ZWriter();
 
         public void Queue(ref byte[] _msgData)
         {
@@ -24,16 +27,18 @@ namespace Znet.Queue
 
                     Console.WriteLine($"Fragment size: {_fragmentSize}");
 
+                    m_NextID++;
                     Packet _packet = new Packet
                     {
                         header = new Packet.Header
                         {
-                            ID = m_NextID++,
-                            Size = (UInt16)_fragmentSize,
+                            ID = m_NextID,
+                            PayloadSize = (UInt16)_fragmentSize,
                             Type = _queuedSize == 0 ? PacketType.FirstFragment : PacketType.Fragment
                         },
-                        data = new byte[_fragmentSize]
                     };
+
+                    _packet.data = new byte[_fragmentSize];
 
                     Array.Copy(_msgData, _queuedSize, _packet.data, 0, _fragmentSize);
                     m_Queue.Add(_packet);
@@ -48,14 +53,21 @@ namespace Znet.Queue
             else
             {
                 //Add this message to the sending list waiting for this message to be sent
-                Packet _packet = new Packet();
-                _packet.header.ID = m_NextID++;
-                _packet.header.Type = PacketType.Packet;
-                _packet.header.Size = (UInt16)_msgData.Length;
-                _packet.data = new byte[_msgData.Length];
+                Packet _packet = new Packet
+                {
+                    header = new Packet.Header
+                    {
+                        ID = m_NextID++,
+                        Type = PacketType.Packet,
+                        PayloadSize = (UInt16)_msgData.Length
+                    },
+                    data = new byte[_msgData.Length]
+                };
+                
                 Array.Copy(_packet.data, _msgData, _msgData.Length);
                 m_Queue.Add(_packet);
             }
+            Console.WriteLine("End queue");
         }
 
         /// <summary>
@@ -67,20 +79,18 @@ namespace Znet.Queue
         public int Serialize(ref byte[] _buffer, int _bufferSize)
         {
             int _currentSerializedSize = 0;
-            int _count = m_Queue.Count;
 
-            for(int i = 0; i < _count; i++)
+            for(int i = 0; i < m_Queue.Count; i++)
             {
-                Packet _pack = m_Queue[i];
+                Packet _packet = m_Queue[i];
 
-                if (_pack.header.Size + _currentSerializedSize > _bufferSize)
-                {
+                if (_packet.header.PayloadSize + _currentSerializedSize > _bufferSize)
                     break;
-                }
 
-                Array.Copy(_pack.data, 0, _buffer, _currentSerializedSize, _pack.data.Length);
-                _currentSerializedSize += _pack.header.Size;
-                m_Queue.Remove(_pack);
+                _writer.WritePacket(_packet, ref _packet.data);
+                Array.Copy(_writer.Buffer, 0, _buffer, _currentSerializedSize, _writer.Buffer.Length);
+                _currentSerializedSize += _packet.header.PayloadSize;
+                m_Queue.Remove(_packet);
             }
 
             return _currentSerializedSize;

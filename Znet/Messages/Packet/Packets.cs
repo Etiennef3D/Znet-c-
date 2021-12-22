@@ -7,7 +7,7 @@ namespace Znet.Messages.Packet
         public struct Header
         {
             public UInt16 ID;
-            public UInt16 Size;
+            public UInt16 PayloadSize;
             public PacketType Type;
         }
 

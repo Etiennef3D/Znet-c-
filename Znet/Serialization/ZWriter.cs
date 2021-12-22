@@ -1,4 +1,5 @@
 ﻿using System;
+using Znet.Messages.Packet;
 
 namespace Znet.Serialization
 {
@@ -30,7 +31,7 @@ namespace Znet.Serialization
             _currentWritePosition = _initialWritePosition;
         }
 
-        private void WriteByte(byte _byte)
+        public void WriteByte(byte _byte)
         {
             _buffer[_currentWritePosition] = _byte;
             _currentWritePosition++;
@@ -55,6 +56,19 @@ namespace Znet.Serialization
             _buffer[_initialWritePosition + 0] = _weightArray[0];
             _buffer[_initialWritePosition + 1] = _weightArray[1];
             return _packetLength;
+        }
+
+        public void WritePacket(Packet p, ref byte[] _buffer)
+        {
+            WriteUInt16(p.header.ID);
+            WriteByte((byte)p.header.Type);
+            WriteUInt16(p.header.PayloadSize);
+
+            for(int i = 0; i < _buffer.Length; i++)
+            {
+                WriteByte(_buffer[i]);
+            }
+            p.data = Buffer;
         }
     }
 }

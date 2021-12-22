@@ -22,6 +22,13 @@ namespace Znet.Serialization
             m_CurrentReadPosition = _readingPos;
         }
 
+        public byte ReadByte()
+        {
+            byte _result = _buffer[m_CurrentReadPosition];
+            m_CurrentReadPosition++;
+            return _result;
+        }
+
         public UInt16 ReadUInt16()
         {
             Array.Copy(_buffer, m_CurrentReadPosition, m_UInt16Buffer, 0, 2);
