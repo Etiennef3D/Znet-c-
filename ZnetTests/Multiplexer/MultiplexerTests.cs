@@ -12,12 +12,12 @@ namespace ZnetTests.Multiplexer
         {
             UnreliableMultiplexer _multiplexer = new UnreliableMultiplexer();
             byte[] _buffer = new byte[5];
-            _multiplexer.QueueMessage(_buffer);
+            _multiplexer.Queue(_buffer);
 
             Assert.AreEqual(_multiplexer.m_Queue.Count, 1);
 
             byte[] _secondBuffer = new byte[20];
-            _multiplexer.QueueMessage(_secondBuffer);
+            _multiplexer.Queue(_secondBuffer);
 
             Assert.AreEqual(_multiplexer.m_Queue.Count, 2);
         }
@@ -28,7 +28,7 @@ namespace ZnetTests.Multiplexer
             UnreliableMultiplexer _multiplexer = new UnreliableMultiplexer();
             byte[] _veryBigMessage = new byte[Packet.DataMaxSize * 3];
 
-            _multiplexer.QueueMessage(_veryBigMessage);
+            _multiplexer.Queue(_veryBigMessage);
 
             Assert.AreEqual(_multiplexer.m_Queue.Count, 3);
             Assert.AreEqual(_multiplexer.m_NextID, 3);
@@ -42,7 +42,7 @@ namespace ZnetTests.Multiplexer
             int _dataLength = 5 + Packet.HeaderSize;
             byte[] _payloadBuffer = new byte[5] { 1, 2, 3, 4, 5 };
 
-            _multiplexer.QueueMessage(_payloadBuffer);
+            _multiplexer.Queue(_payloadBuffer);
 
             int _serializedDataSize = _multiplexer.Serialize(ref _sendBuffer, _dataLength);
 
@@ -58,7 +58,7 @@ namespace ZnetTests.Multiplexer
             byte[] _sendBuffer = new byte[Packet.PacketMaxSize];
             UnreliableMultiplexer _multiplexer = new UnreliableMultiplexer();
             byte[] _veryBigMessage = new byte[Packet.DataMaxSize * 3];
-            _multiplexer.QueueMessage(_veryBigMessage);
+            _multiplexer.Queue(_veryBigMessage);
 
             Assert.AreEqual(_multiplexer.m_Queue.Count, 3);
             Assert.AreEqual(_multiplexer.m_NextID, 3);

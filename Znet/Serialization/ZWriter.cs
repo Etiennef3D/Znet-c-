@@ -49,7 +49,6 @@ namespace Znet.Serialization
         {
             for(int i = 0; i < _content.Length; i++)
             {
-                Console.WriteLine($"Write byte {_content[i]} in buffer");
                 _buffer[_currentWritePosition] = _content[i];
                 _currentWritePosition++;
             }

@@ -45,7 +45,7 @@ namespace Znet.Queue
 				Array.Copy(_buffer, _processedDataSize + Packet.HeaderSize, _packet.data, 0, _packet.header.PayloadSize);
 
 				//Prevent malformed packet
-                if (_processedDataSize > _dataSize || _packet.data.Length > Packet.DataMaxSize)
+                if (_packet.data.Length > Packet.DataMaxSize)
                 {
                     return;
                 }
@@ -64,27 +64,12 @@ namespace Znet.Queue
 				return;
             }
 
-			if(m_PendingQueue.Count == 0 || Utils.Utils.IsSequenceNewer(_packet.header.ID, m_PendingQueue[m_LastProcessed].header.ID))
+			if(m_PendingQueue.Count == 0 
+				|| (m_PendingQueue.Count > 0 && Utils.Utils.IsSequenceNewer(_packet.header.ID, m_LastProcessed)))
             {
 				Console.WriteLine($"Add packet {_packet.header.ID} to the queue");
 				m_PendingQueue.Add(_packet);
             }
-            else
-            {
-				int _index = 0;
-
-				//<! Trouver le premier itérateur avec un identifiant égal à ou plus récent que notre paquet, nous devons placer le paquet avant celui-ci
-				for(int i = 0; i < m_PendingQueue.Count; i++)
-                {
-					if(m_PendingQueue[i].header.ID != _packet.header.ID)
-                    {
-						_index = i;
-						m_PendingQueue.Insert(_index, _packet);
-						break;
-					}
-                }
-			}
-		
 			m_LastProcessed = _packet.header.ID;
 		}
 	}

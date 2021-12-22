@@ -13,7 +13,7 @@ namespace Znet.Queue
 
         private ZWriter _writer = new ZWriter();
 
-        public void QueueMessage(byte[] _message)
+        public void Queue(byte[] _message)
         {
             Console.WriteLine("Queuing message");
 
@@ -82,7 +82,7 @@ namespace Znet.Queue
         {
             Console.WriteLine($"Multiplexer serialization. Messages to process in the queue: {m_Queue.Count}");
             int _currentSerializedSize = 0;
-            int _queueCount = m_Queue.Count;
+
             List<Packet> _packetList = new List<Packet>();
 
             //Fill the copied list
@@ -93,11 +93,13 @@ namespace Znet.Queue
 
             _writer.Init(0);
 
+            //Iterate through a copied list instead of m_Queue
             foreach (Packet _packet in _packetList)
             {
                 if(_packet.header.PayloadSize + Packet.HeaderSize > _bufferSize)
                 {
-                    Console.WriteLine("SHOULDN'T HAPPEN");
+                    _currentSerializedSize = - 1;
+                    break;
                 }
                 if(_currentSerializedSize >= _bufferSize || _packet.header.PayloadSize >= _bufferSize)
                 {

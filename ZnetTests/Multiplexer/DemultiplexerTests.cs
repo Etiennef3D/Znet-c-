@@ -22,7 +22,7 @@ namespace ZnetTests.Multiplexer
             byte[] _data = new byte[] { 1, 2, 3, 4, 5 };
             byte[] _buffer = new byte[Packet.PacketMaxSize];
             UnreliableMultiplexer _multiplexer = new UnreliableMultiplexer();
-            _multiplexer.QueueMessage(_data);
+            _multiplexer.Queue(_data);
             _multiplexer.Serialize(ref _buffer, _buffer.Length);
 
             UnreliableDemultiplexer _demultiplexer = new UnreliableDemultiplexer();
@@ -39,7 +39,7 @@ namespace ZnetTests.Multiplexer
             byte[] _buffer = new byte[Packet.PacketMaxSize];
 
             UnreliableMultiplexer _multiplexer = new UnreliableMultiplexer();
-            _multiplexer.QueueMessage(_veryBigMessage);
+            _multiplexer.Queue(_veryBigMessage);
             int _length = _multiplexer.Serialize(ref _buffer, Packet.PacketMaxSize);
 
             Assert.AreEqual(_length, Packet.PacketMaxSize);
@@ -49,56 +49,48 @@ namespace ZnetTests.Multiplexer
             _demultiplexer.OnDataReceived(ref _buffer, _length);
 
             Assert.AreEqual(1, _demultiplexer.m_LastProcessed);
-            
+            Assert.AreEqual(1, _demultiplexer.m_PendingQueue.Count);
         }
 
         [TestMethod]
-        public void ReceiveData()
+        public void ReceivedFragmentedMessageInWrongOrder()
         {
-            //Packet _packetZero = new Packet
-            //{
-            //    header = new Packet.Header
-            //    {
-            //        ID = 0,
-            //        PayloadSize = 5,
-            //        Type = PacketType.Packet
-            //    },
-            //    data = new byte[] { 1, 2, 3, 4, 5 }
-            //};
-           
-            //UnreliableMultiplexer _multiplexer = new UnreliableMultiplexer();
-            //UnreliableDemultiplexer _demultiplexer = new UnreliableDemultiplexer();
+            UnreliableMultiplexer _multiplexer = new UnreliableMultiplexer();
+            UnreliableDemultiplexer _demultiplexer = new UnreliableDemultiplexer();
 
-            //Assert.AreEqual(_packetZero.header.ID, 0);
-            //Assert.AreEqual(_packetZero.header.Type, PacketType.Packet);
+            byte[] _data = new byte[Packet.DataMaxSize * 3];
+            _multiplexer.Queue(_data);
+            
+            int _firstMessageLength = _multiplexer.Serialize(ref _data, Packet.PacketMaxSize);
+            
+            Assert.AreEqual(Packet.PacketMaxSize, _firstMessageLength);
 
-            //_multiplexer.Queue(ref _packetZero.data);
-            //_multiplexer.Serialize(ref _packetZero.data, Packet.PacketMaxSize);
-            //_demultiplexer.OnDataReceived(ref _packetZero.data, _packetZero.data.Length);
+            //Receive message 1
+            _demultiplexer.OnDataReceived(ref _data, _data.Length);
+            Assert.AreEqual(1, _demultiplexer.m_PendingQueue.Count);
 
-            //Assert.AreEqual(_demultiplexer.m_PendingQueue.Count, 1);
+            int _secondMessageLength = _multiplexer.Serialize(ref _data, Packet.PacketMaxSize);
+            int _thirdMessageLength = _multiplexer.Serialize(ref _data, Packet.PacketMaxSize);
+
+            //Receive message 3
+            _demultiplexer.OnDataReceived(ref _data, _data.Length);
+
+            Assert.AreEqual(2, _demultiplexer.m_PendingQueue.Count);
+            Assert.AreEqual(3, _demultiplexer.m_LastProcessed);
 
 
-            //Packet _packetOne = new Packet
-            //{
-            //    header = new Packet.Header
-            //    {
-            //        ID = 1,
-            //        PayloadSize = 6,
-            //        Type = PacketType.Packet
-            //    },
-            //    data = new byte[] { 1, 2, 3, 4, 5, 6}
-            //};
+            //Receive message 2 -- Should be ignored
+            UInt16 _fakeHeaderId = 2;
+            byte[] _fakeHeaderBytes = BitConverter.GetBytes(_fakeHeaderId);
+            Array.Copy(_fakeHeaderBytes, _data, 2);
 
-            //Assert.AreEqual(_packetOne.header.ID, 1);
-            //Assert.AreEqual(_packetOne.header.Type, PacketType.Packet);
-            //Assert.AreEqual(_packetOne.header.PayloadSize, 6);
+            _demultiplexer.OnDataReceived(ref _data, _data.Length);
 
-            //_multiplexer.Queue(ref _packetOne.data);
-            //_multiplexer.Serialize(ref _packetOne.data, Packet.PacketMaxSize);
-            //_demultiplexer.OnDataReceived(ref _packetOne.data, _packetOne.header.PayloadSize);
+            //Still the same as before, because UnreliableDemultiplex doesn't handle late packets
+            Assert.AreEqual(2, _demultiplexer.m_PendingQueue.Count);
+            Assert.AreEqual(3, _demultiplexer.m_LastProcessed);
 
-            //Assert.AreEqual(_demultiplexer.m_PendingQueue.Count, 2);
+            //Check order of the list
         }
     }
 }
