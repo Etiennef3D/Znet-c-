@@ -45,7 +45,7 @@ namespace Znet.Serialization
             }
         }
 
-        private void WriteBytesInBuffer(byte[] _content, ref byte[] _buffer)
+        public void WriteBytesInBuffer(byte[] _content, ref byte[] _buffer)
         {
             for(int i = 0; i < _content.Length; i++)
             {

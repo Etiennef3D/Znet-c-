@@ -12,6 +12,13 @@ namespace Znet.Queue
 
 		private ZReader _reader = new ZReader();
 
+		/// <summary>
+		/// Called when data is received.
+		/// Extract packets from the buffer and adds them to a list.
+		/// Handles malformed packets.
+		/// </summary>
+		/// <param name="_buffer"></param>
+		/// <param name="_dataSize"></param>
 		public void OnDataReceived(ref byte[] _buffer, int _dataSize)
         {
 			Console.WriteLine($"{nameof(OnDataReceived)} - Data size: {_dataSize} ");
@@ -72,5 +79,49 @@ namespace Znet.Queue
             }
 			m_LastProcessed = _packet.header.ID;
 		}
+
+		/// <summary>
+		/// Get complete messages from the last call.
+		/// </summary>
+		public byte[] Process()
+        {
+			byte[] _messagesReady = new byte[Packet.MaxMessageSize];
+			bool _hasProcessed = false;
+			UInt16 _lastHeaderID = 0;
+			ZWriter _writer = new ZWriter();
+
+			for(int i = 0; i < m_PendingQueue.Count; i++)
+            {
+				Packet _packet = m_PendingQueue[i];
+
+				if(_packet.header.Type == PacketType.Packet)
+                {
+					//Copy data to the messageReady
+					_hasProcessed = true;
+					_writer.WriteBytesInBuffer(_packet.data, ref _messagesReady);
+					_lastHeaderID = _packet.header.ID;
+
+				}
+				else if(_packet.header.Type == PacketType.FirstFragment)
+                {
+					_hasProcessed = true;
+					//Fragmented message case
+
+				}
+            }
+
+			//Update internal state
+			if(_hasProcessed)
+            {
+				//Update last handled packet to refuse older next time
+				m_LastProcessed = _lastHeaderID;
+
+				//And clear the queue
+				m_PendingQueue.Clear();
+            }
+
+
+			return _messagesReady;
+        }
 	}
 }
