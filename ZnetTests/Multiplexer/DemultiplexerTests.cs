@@ -69,15 +69,14 @@ namespace ZnetTests.Multiplexer
             _demultiplexer.OnDataReceived(ref _data, _data.Length);
             Assert.AreEqual(1, _demultiplexer.m_PendingQueue.Count);
 
-            int _secondMessageLength = _multiplexer.Serialize(ref _data, Packet.PacketMaxSize);
-            int _thirdMessageLength = _multiplexer.Serialize(ref _data, Packet.PacketMaxSize);
+            _multiplexer.Serialize(ref _data, Packet.PacketMaxSize);
+            _multiplexer.Serialize(ref _data, Packet.PacketMaxSize);
 
             //Receive message 3
             _demultiplexer.OnDataReceived(ref _data, _data.Length);
 
             Assert.AreEqual(2, _demultiplexer.m_PendingQueue.Count);
             Assert.AreEqual(3, _demultiplexer.m_LastProcessed);
-
 
             //Receive message 2 -- Should be ignored
             UInt16 _fakeHeaderId = 2;
@@ -89,8 +88,44 @@ namespace ZnetTests.Multiplexer
             //Still the same as before, because UnreliableDemultiplex doesn't handle late packets
             Assert.AreEqual(2, _demultiplexer.m_PendingQueue.Count);
             Assert.AreEqual(3, _demultiplexer.m_LastProcessed);
+        }
 
-            //Check order of the list
+        [TestMethod]
+        public void ReceivedMaximumSizeMessage()
+        {
+            byte[] _buffer = new byte[Packet.PacketMaxSize];            // 1388 o
+            byte[] _maxSizeMessage = new byte[Packet.MaxMessageSize];   // ~42  ko
+
+            UnreliableMultiplexer _multiplexer = new UnreliableMultiplexer();
+            UnreliableDemultiplexer _demultiplexer = new UnreliableDemultiplexer();
+
+            _multiplexer.Queue(_maxSizeMessage);
+            Assert.AreEqual(32, _multiplexer.m_Queue.Count);
+
+            //We should have the exact same packet 32 times
+            for(int i = 0; i < 32; i++)
+            {
+                int _dataLength = _multiplexer.Serialize(ref _buffer, Packet.PacketMaxSize);
+                Assert.AreEqual(Packet.PacketMaxSize, _dataLength);
+
+                _demultiplexer.OnDataReceived(ref _buffer, _dataLength);
+                Assert.AreEqual(i+1, _demultiplexer.m_PendingQueue.Count);
+            }
+        }
+
+        [TestMethod]
+        public void ReceiveMinimumSizeMessage()
+        {
+            byte[] _buffer = new byte[Packet.PacketMaxSize];
+            byte[] _minSizeMessage = new byte[0];
+            UnreliableMultiplexer _multiplexer = new UnreliableMultiplexer();
+            UnreliableDemultiplexer _demultiplexer = new UnreliableDemultiplexer();
+
+            _multiplexer.Queue(_minSizeMessage);
+            _multiplexer.Serialize(ref _buffer, Packet.PacketMaxSize);
+            _demultiplexer.OnDataReceived(ref _buffer, _buffer.Length);
+
+            Assert.AreEqual(1, _demultiplexer.m_PendingQueue.Count);
         }
     }
 }

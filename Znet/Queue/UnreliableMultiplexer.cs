@@ -17,7 +17,11 @@ namespace Znet.Queue
         {
             Console.WriteLine("Queuing message");
 
-            //A message is limited to 32 fragments (32*1383  = 44,256Ko)
+            if(_message.Length > Packet.MaxMessageSize)
+            {
+                //Not handled, message is too big
+                return;
+            }
             Debug.Assert(_message.Length <= Packet.MaxMessageSize);
 
             //If we need to fragment this message

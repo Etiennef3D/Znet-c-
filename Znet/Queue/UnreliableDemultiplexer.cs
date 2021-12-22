@@ -15,7 +15,7 @@ namespace Znet.Queue
 		public void OnDataReceived(ref byte[] _buffer, int _dataSize)
         {
 			Console.WriteLine($"{nameof(OnDataReceived)} - Data size: {_dataSize} ");
-
+			
 			int _processedDataSize = 0;
 
 			while(_processedDataSize < _dataSize)

@@ -45,11 +45,7 @@ namespace ZnetTests.Multiplexer
             _multiplexer.Queue(_payloadBuffer);
 
             int _serializedDataSize = _multiplexer.Serialize(ref _sendBuffer, _dataLength);
-
             Assert.AreEqual(_serializedDataSize, _dataLength);
-
-            //TODO: Check binary as well
-
         }
 
         [TestMethod]
@@ -78,6 +74,35 @@ namespace ZnetTests.Multiplexer
             //Now we should have an empty list
             Assert.AreEqual(_multiplexer.m_Queue.Count, 0);
             Assert.AreEqual(_multiplexer.m_NextID, 3);
+        }
+
+        [TestMethod]
+        public void SendingTooBigMessage()
+        {
+            byte[] _tooBigMessage = new byte[Packet.DataMaxSize * (Packet.MaxFragmentsPerMessage + 1)];
+
+            UnreliableMultiplexer _multiplexer = new UnreliableMultiplexer();
+            _multiplexer.Queue(_tooBigMessage);
+
+            Assert.AreEqual(0, _multiplexer.m_Queue.Count);
+        }
+
+        [TestMethod]
+        public void SendingMaximumSizeMessage()
+        {
+            byte[] _maxSizeMessage = new byte[Packet.MaxMessageSize];
+            UnreliableMultiplexer _multiplexer = new UnreliableMultiplexer();
+            _multiplexer.Queue(_maxSizeMessage);
+            Assert.AreEqual(32, _multiplexer.m_Queue.Count);
+        }
+
+        [TestMethod]
+        public void SendingMinimumSizeMessage()
+        {
+            byte[] _minSizeMessage = new byte[0];
+            UnreliableMultiplexer _multiplexer = new UnreliableMultiplexer();
+            _multiplexer.Queue(_minSizeMessage);
+            Assert.AreEqual(1, _multiplexer.m_Queue.Count);
         }
     }
 }
