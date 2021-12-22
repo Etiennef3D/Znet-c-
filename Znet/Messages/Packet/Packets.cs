@@ -19,6 +19,11 @@ namespace Znet.Messages.Packet
 
         public Header header;
         public byte[] data;
+
+        public override string ToString()
+        {
+            return $"Packet ID: {header.ID}, Type: {header.Type}, PayloadSize {header.PayloadSize}";
+        }
     }
 
     public enum PacketType

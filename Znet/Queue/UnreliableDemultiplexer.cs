@@ -12,44 +12,46 @@ namespace Znet.Queue
 
 		private ZReader _reader = new ZReader();
 
-		/// <summary>
-		/// Extract packets from the buffer
-		/// </summary>
-		/// <param name="_buffer"></param>
-		/// <param name="_dataSize"></param>
 		public void OnDataReceived(ref byte[] _buffer, int _dataSize)
         {
-			Console.WriteLine($"Data received. Buffer length: {_buffer.Length}, data size: {_dataSize}");
+			Console.WriteLine($"{nameof(OnDataReceived)} - Data size: {_dataSize} ");
+
 			int _processedDataSize = 0;
 
-			//<! Extraire les paquets du tampon
 			while(_processedDataSize < _dataSize)
             {
 				_reader.Init(_buffer, _processedDataSize);
 
+				UInt16 _packetID = _reader.ReadUInt16();
+				PacketType _packetType = (PacketType)_reader.ReadByte();
+				UInt16 _payloadSize = _reader.ReadUInt16();
+
+				//Extract packet from buffer
 				Packet _packet = new Packet
 				{
 					header = new Packet.Header
 					{
-						ID = _reader.ReadUInt16(),
-						PayloadSize = _reader.ReadUInt16(),
-						Type = (PacketType) _reader.ReadByte()
+						ID = _packetID,
+						Type = _packetType,
+						PayloadSize = _payloadSize
 					},
+
+					data = new byte[_payloadSize]
 				};
 
-				int _size = _packet.header.PayloadSize + Packet.HeaderSize;
-				_packet.data = new byte[_size];
+				Console.WriteLine($"Processing packet {_packet}");
 
-				//Form the received packet from the buffer
-				Array.Copy(_buffer, _packet.data, _size);
+				//Set the payload data in the packet
+				Array.Copy(_buffer, _processedDataSize + Packet.HeaderSize, _packet.data, 0, _packet.header.PayloadSize);
 
-				//Read header, if not good, discard
-				if (_processedDataSize + _packet.header.PayloadSize > _dataSize || _packet.data.Length > Packet.DataMaxSize)
-					return;
+				//Prevent malformed packet
+                if (_processedDataSize > _dataSize || _packet.data.Length > Packet.DataMaxSize)
+                {
+                    return;
+                }
 
 				OnPacketReceived(ref _packet);
-				_processedDataSize += _packet.header.PayloadSize + _dataSize;
-				Console.WriteLine($"Processed: {_processedDataSize} - Data size: {_dataSize}");
+				_processedDataSize += _dataSize;
 			}
 		}
 
@@ -64,7 +66,7 @@ namespace Znet.Queue
 
 			if(m_PendingQueue.Count == 0 || Utils.Utils.IsSequenceNewer(_packet.header.ID, m_PendingQueue[m_LastProcessed].header.ID))
             {
-				Console.WriteLine("ADD PACKET");
+				Console.WriteLine($"Add packet {_packet.header.ID} to the queue");
 				m_PendingQueue.Add(_packet);
             }
             else

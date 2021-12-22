@@ -31,7 +31,7 @@ namespace ZnetTests.Multiplexer
             _multiplexer.QueueMessage(_veryBigMessage);
 
             Assert.AreEqual(_multiplexer.m_Queue.Count, 3);
-            Assert.AreEqual(_multiplexer.m_NextID, 4);
+            Assert.AreEqual(_multiplexer.m_NextID, 3);
         }
 
         [TestMethod]
@@ -47,6 +47,9 @@ namespace ZnetTests.Multiplexer
             int _serializedDataSize = _multiplexer.Serialize(ref _sendBuffer, _dataLength);
 
             Assert.AreEqual(_serializedDataSize, _dataLength);
+
+            //TODO: Check binary as well
+
         }
 
         [TestMethod]
@@ -58,7 +61,7 @@ namespace ZnetTests.Multiplexer
             _multiplexer.QueueMessage(_veryBigMessage);
 
             Assert.AreEqual(_multiplexer.m_Queue.Count, 3);
-            Assert.AreEqual(_multiplexer.m_NextID, 4);
+            Assert.AreEqual(_multiplexer.m_NextID, 3);
 
             //Make sure when we have 3 fragments, that the serialize method only return 1 message with a fragment
             int _serializedDataSize = _multiplexer.Serialize(ref _sendBuffer, _sendBuffer.Length);
@@ -74,7 +77,7 @@ namespace ZnetTests.Multiplexer
 
             //Now we should have an empty list
             Assert.AreEqual(_multiplexer.m_Queue.Count, 0);
-            Assert.AreEqual(_multiplexer.m_NextID, 4);
+            Assert.AreEqual(_multiplexer.m_NextID, 3);
         }
     }
 }

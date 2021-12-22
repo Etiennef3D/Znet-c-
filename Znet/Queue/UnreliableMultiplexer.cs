@@ -9,7 +9,7 @@ namespace Znet.Queue
     public class UnreliableMultiplexer
     {
         public List<Packet> m_Queue = new List<Packet>();
-        public UInt16 m_NextID = 1;
+        public UInt16 m_NextID = 0;
 
         private ZWriter _writer = new ZWriter();
 
@@ -44,15 +44,15 @@ namespace Znet.Queue
                     _packet.data = new byte[_fragmentSize];
 
                     Array.Copy(_message, _queuedSize, _packet.data, 0, _fragmentSize);
+
+                    if ((_queuedSize + _fragmentSize) >= _message.Length)
+                    {
+                        _packet.header.Type = PacketType.LastFragment;
+                    }
+
                     m_Queue.Add(_packet);
                     _queuedSize += _fragmentSize;
                 }
-
-                //At the end of the loop, we know that the last created packet is the last fragment
-                int _index = m_Queue.Count - 1;
-                Packet _pack = m_Queue[_index];
-                _pack.header.Type = PacketType.LastFragment;
-
                 Debug.Assert(_queuedSize == _message.Length);
             }
             //This message don't need to be fragmented, add it as an entiere packet
@@ -80,25 +80,42 @@ namespace Znet.Queue
         /// <returns></returns>
         public int Serialize(ref byte[] _buffer, int _bufferSize)
         {
+            Console.WriteLine($"Multiplexer serialization. Messages to process in the queue: {m_Queue.Count}");
             int _currentSerializedSize = 0;
+            int _queueCount = m_Queue.Count;
+            List<Packet> _packetList = new List<Packet>();
 
-            _writer.Init(0);
-            for (int i = 0; i < m_Queue.Count; i++)
+            //Fill the copied list
+            for(int i = 0; i < m_Queue.Count; i++)
             {
-                Packet _packet = m_Queue[i];
-
-                if (_packet.header.PayloadSize + _currentSerializedSize > _bufferSize)
-                    break;
-
-                _writer.WritePacket(_packet, ref _packet.data);
-
-                //Packet header is 5
-                Array.Copy(_writer.Buffer, 0, _buffer, _currentSerializedSize, _writer.Buffer.Length);
-                int _packetSize = _packet.header.PayloadSize + Packet.HeaderSize;
-                _currentSerializedSize += _packetSize;
-                m_Queue.Remove(_packet);
+                _packetList.Add(m_Queue[i]);
             }
 
+            _writer.Init(0);
+
+            foreach (Packet _packet in _packetList)
+            {
+                if(_packet.header.PayloadSize + Packet.HeaderSize > _bufferSize)
+                {
+                    Console.WriteLine("SHOULDN'T HAPPEN");
+                }
+                if(_currentSerializedSize >= _bufferSize || _packet.header.PayloadSize >= _bufferSize)
+                {
+                    Console.WriteLine("Buffer not large enough to serialize or serialization ended.");
+                    break;
+                }
+
+                Console.WriteLine($"Serializing packet: {_packet}");
+
+                //Write packet header in the buffer
+                _writer.WritePacket(_packet, ref _buffer);
+
+                //Write packet data in the buffer
+                _currentSerializedSize += (_packet.header.PayloadSize + Packet.HeaderSize);
+
+                m_Queue.Remove(_packet);
+                Console.WriteLine($"Removing packet {_packet}. Remaining: {m_Queue.Count}");
+            }
             return _currentSerializedSize;
         }
     }

@@ -11,9 +11,45 @@ namespace ZnetTests.Multiplexer
         [TestMethod]
         public void Initialize()
         {
-            //UnreliableDemultiplexer _demultiplexer = new UnreliableDemultiplexer();
-            //Assert.AreEqual(_demultiplexer.m_PendingQueue.Count, 0);
-            //Assert.AreEqual(_demultiplexer.m_LastProcessed, UInt16.MaxValue);
+            UnreliableDemultiplexer _demultiplexer = new UnreliableDemultiplexer();
+            Assert.AreEqual(_demultiplexer.m_PendingQueue.Count, 0);
+            Assert.AreEqual(_demultiplexer.m_LastProcessed, UInt16.MaxValue);
+        }
+
+        [TestMethod]
+        public void ReceiveUnfragmentedMessage()
+        {
+            byte[] _data = new byte[] { 1, 2, 3, 4, 5 };
+            byte[] _buffer = new byte[Packet.PacketMaxSize];
+            UnreliableMultiplexer _multiplexer = new UnreliableMultiplexer();
+            _multiplexer.QueueMessage(_data);
+            _multiplexer.Serialize(ref _buffer, _buffer.Length);
+
+            UnreliableDemultiplexer _demultiplexer = new UnreliableDemultiplexer();
+            _demultiplexer.OnDataReceived(ref _buffer, _data.Length);
+
+            Assert.AreEqual(_demultiplexer.m_PendingQueue.Count, 1);
+            Assert.AreEqual(_demultiplexer.m_LastProcessed, 0);
+        }
+
+        [TestMethod]
+        public void ReceiveFragmentedMessage()
+        {
+            byte[] _veryBigMessage = new byte[Packet.DataMaxSize * 3];
+            byte[] _buffer = new byte[Packet.PacketMaxSize];
+
+            UnreliableMultiplexer _multiplexer = new UnreliableMultiplexer();
+            _multiplexer.QueueMessage(_veryBigMessage);
+            int _length = _multiplexer.Serialize(ref _buffer, Packet.PacketMaxSize);
+
+            Assert.AreEqual(_length, Packet.PacketMaxSize);
+            Assert.AreEqual(3, _multiplexer.m_Queue[_multiplexer.m_Queue.Count - 1].header.ID);
+
+            UnreliableDemultiplexer _demultiplexer = new UnreliableDemultiplexer();
+            _demultiplexer.OnDataReceived(ref _buffer, _length);
+
+            Assert.AreEqual(1, _demultiplexer.m_LastProcessed);
+            
         }
 
         [TestMethod]

@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Text;
 using Znet.Messages.Packet;
 
 namespace Znet.Serialization
@@ -13,18 +14,17 @@ namespace Znet.Serialization
 
                 for(int i = 0; i < _initialWritePosition + _currentWritePosition; i++)
                 {
-                    _returnedBuffer[i] = _buffer[i];
+                    _returnedBuffer[i] = _writerBuffer[i];
                 }
                 return _returnedBuffer;
             }
         }
 
         //MTU - Header size
-        private const int BUFFER_MAX_SIZE = 1400 - 12;
-        private readonly byte[] _buffer = new byte[BUFFER_MAX_SIZE];
+        private byte[] _writerBuffer = new byte[Packet.PacketMaxSize];
         private int _currentWritePosition = 0;
         private int _initialWritePosition = 0;
-        
+
         public void Init(int _writerPosition)
         {
             _initialWritePosition = _writerPosition;
@@ -33,15 +33,25 @@ namespace Znet.Serialization
 
         public void WriteByte(byte _byte)
         {
-            _buffer[_currentWritePosition] = _byte;
+            _writerBuffer[_currentWritePosition] = _byte;
             _currentWritePosition++;
         }
 
-        private void WriteBytes(byte[] _bytes)
+        public void WriteBytes(byte[] _bytes)
         {
             for(int i = 0; i < _bytes.Length; i++)
             {
                 WriteByte(_bytes[i]);
+            }
+        }
+
+        private void WriteBytesInBuffer(byte[] _content, ref byte[] _buffer)
+        {
+            for(int i = 0; i < _content.Length; i++)
+            {
+                Console.WriteLine($"Write byte {_content[i]} in buffer");
+                _buffer[_currentWritePosition] = _content[i];
+                _currentWritePosition++;
             }
         }
 
@@ -53,22 +63,19 @@ namespace Znet.Serialization
         {
             UInt16 _packetLength = (UInt16)_currentWritePosition;
             byte[] _weightArray = BitConverter.GetBytes(_packetLength);
-            _buffer[_initialWritePosition + 0] = _weightArray[0];
-            _buffer[_initialWritePosition + 1] = _weightArray[1];
+            _writerBuffer[_initialWritePosition + 0] = _weightArray[0];
+            _writerBuffer[_initialWritePosition + 1] = _weightArray[1];
             return _packetLength;
         }
 
-        public void WritePacket(Packet p, ref byte[] _buffer)
+        public void WritePacket(Packet _packet, ref byte[] _buffer)
         {
-            WriteUInt16(p.header.ID);
-            WriteByte((byte)p.header.Type);
-            WriteUInt16(p.header.PayloadSize);
+            Console.WriteLine($"Write packet id{_packet.header.ID}. Current write position: " + _currentWritePosition);
+            WriteBytesInBuffer(BitConverter.GetBytes((UInt16)_packet.header.ID), ref _buffer);
+            WriteByte((byte)_packet.header.Type);
+            WriteBytesInBuffer(BitConverter.GetBytes(_packet.header.PayloadSize), ref _buffer);
 
-            for(int i = 0; i < _buffer.Length; i++)
-            {
-                WriteByte(_buffer[i]);
-            }
-            p.data = Buffer;
+            WriteBytesInBuffer(_packet.data, ref _buffer);
         }
     }
 }
