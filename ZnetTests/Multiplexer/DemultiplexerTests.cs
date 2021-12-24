@@ -127,5 +127,105 @@ namespace ZnetTests.Multiplexer
 
             Assert.AreEqual(1, _demultiplexer.m_PendingQueue.Count);
         }
+
+        [TestMethod]
+        public void ProcessSimpleMessage()
+        {
+            byte[] _buffer = new byte[Packet.PacketMaxSize];
+            byte[] _minSizeMessage = new byte[0];
+            UnreliableMultiplexer _multiplexer = new UnreliableMultiplexer();
+            UnreliableDemultiplexer _demultiplexer = new UnreliableDemultiplexer();
+
+            _multiplexer.Queue(_minSizeMessage);
+            _multiplexer.Serialize(ref _buffer, Packet.PacketMaxSize);
+            _demultiplexer.OnDataReceived(ref _buffer, _buffer.Length);
+            _demultiplexer.Process();
+
+            Assert.AreEqual(0, _demultiplexer.m_PendingQueue.Count);
+        }
+
+        [TestMethod]
+        public void ProcessExistingFragmentedMessage()
+        {
+            byte[] _buffer = new byte[Packet.PacketMaxSize];
+            byte[] _minSizeMessage = new byte[Packet.DataMaxSize * 3];
+            UnreliableMultiplexer _multiplexer = new UnreliableMultiplexer();
+            UnreliableDemultiplexer _demultiplexer = new UnreliableDemultiplexer();
+
+            _multiplexer.Queue(_minSizeMessage);
+
+            //Receive 1/3 message
+            int _length = _multiplexer.Serialize(ref _buffer, Packet.PacketMaxSize);
+            _demultiplexer.OnDataReceived(ref _buffer, _length);
+
+            //Receive 2/3 message
+            _length = _multiplexer.Serialize(ref _buffer, Packet.PacketMaxSize);
+            _demultiplexer.OnDataReceived(ref _buffer, _length);
+
+            //Receive 3/3 message
+            _length = _multiplexer.Serialize(ref _buffer, Packet.PacketMaxSize);
+            _demultiplexer.OnDataReceived(ref _buffer, _length);
+
+            Assert.AreEqual(3, _demultiplexer.m_PendingQueue.Count);
+
+            //Assemble messages and clear the queue
+            _demultiplexer.Process();
+
+            //Now the list should be empty
+            Assert.AreEqual(0, _demultiplexer.m_PendingQueue.Count);
+        }
+
+        [TestMethod]
+        public void ProcessNonExistingFragmentedMessage()
+        {
+            byte[] _buffer = new byte[Packet.PacketMaxSize];
+            byte[] _minSizeMessage = new byte[Packet.DataMaxSize * 3];
+            UnreliableMultiplexer _multiplexer = new UnreliableMultiplexer();
+            UnreliableDemultiplexer _demultiplexer = new UnreliableDemultiplexer();
+
+            _multiplexer.Queue(_minSizeMessage);
+
+            //Receive 1/3 message
+            int _length = _multiplexer.Serialize(ref _buffer, Packet.PacketMaxSize);
+            _demultiplexer.OnDataReceived(ref _buffer, _length);
+
+            //Receive 2/3 message
+            _length = _multiplexer.Serialize(ref _buffer, Packet.PacketMaxSize);
+            _demultiplexer.OnDataReceived(ref _buffer, _length);
+
+            //Process should keep messages in the queue
+            Assert.AreEqual(2, _demultiplexer.m_PendingQueue.Count);
+
+            _demultiplexer.Process();
+            Assert.AreEqual(2, _demultiplexer.m_PendingQueue.Count);
+        }
+
+        [TestMethod]
+        public void ProcessWithMissingFragmentedMessage()
+        {
+            byte[] _buffer = new byte[Packet.PacketMaxSize];
+            byte[] _minSizeMessage = new byte[Packet.DataMaxSize * 3];
+            UnreliableMultiplexer _multiplexer = new UnreliableMultiplexer();
+            UnreliableDemultiplexer _demultiplexer = new UnreliableDemultiplexer();
+
+            _multiplexer.Queue(_minSizeMessage);
+
+            //Receive 1/3 message
+            int _length = _multiplexer.Serialize(ref _buffer, Packet.PacketMaxSize);
+            _demultiplexer.OnDataReceived(ref _buffer, _length);
+
+            //Receive 3/3 message
+            _multiplexer.Serialize(ref _buffer, Packet.PacketMaxSize);
+            _length = _multiplexer.Serialize(ref _buffer, Packet.PacketMaxSize);
+            _demultiplexer.OnDataReceived(ref _buffer, _length);
+
+            //Process should keep messages in the queue
+            Assert.AreEqual(2, _demultiplexer.m_PendingQueue.Count);
+
+            _demultiplexer.Process();
+
+            //TODO: Handle missing message parts
+            Assert.AreEqual(0, _demultiplexer.m_PendingQueue.Count);
+        }
     }
 }

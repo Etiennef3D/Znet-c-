@@ -194,7 +194,7 @@ namespace ZnetTests
         public void AckHandlerLongRun()
         {
             AckHandler aHandler = new AckHandler();
-            for(UInt16 i = 0; i < 5000; i++)
+            for(UInt16 i = 0; i < 500; i++)
             {
                 aHandler.Update(i, MASK_COMPLETE);
                 Assert.IsTrue(aHandler.IsAcked(i));

@@ -67,14 +67,23 @@ namespace Znet.Serialization
             return _packetLength;
         }
 
-        public void WritePacket(Packet _packet, ref byte[] _buffer)
+        public void WritePacket(Packet _packet, ref int _currentSerializedSize, ref byte[] _buffer)
         {
             Console.WriteLine($"Write packet id{_packet.header.ID}. Current write position: " + _currentWritePosition);
-            WriteBytesInBuffer(BitConverter.GetBytes((UInt16)_packet.header.ID), ref _buffer);
-            WriteByte((byte)_packet.header.Type);
-            WriteBytesInBuffer(BitConverter.GetBytes(_packet.header.PayloadSize), ref _buffer);
 
-            WriteBytesInBuffer(_packet.data, ref _buffer);
+            byte[] _headerId = BitConverter.GetBytes((UInt16)_packet.header.ID);
+            byte[] _payloadSize = BitConverter.GetBytes(_packet.header.PayloadSize);
+
+            _buffer[_currentSerializedSize++] = _headerId[0];
+            _buffer[_currentSerializedSize++] = _headerId[1];
+            _buffer[_currentSerializedSize++] = (byte)_packet.header.Type;
+            _buffer[_currentSerializedSize++] = _payloadSize[0];
+            _buffer[_currentSerializedSize++] = _payloadSize[1];
+
+            for(int i =0; i < _packet.header.PayloadSize; i++)
+            {
+                _buffer[_currentSerializedSize++] = _packet.data[i];
+            }
         }
     }
 }

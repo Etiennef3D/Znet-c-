@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Text;
 using Znet.Messages.Packet;
 using Znet.Serialization;
 
@@ -29,10 +30,18 @@ namespace Znet.Queue
             {
 				_reader.Init(_buffer, _processedDataSize);
 
+				StringBuilder _builder = new StringBuilder();
+				for(int i = 0; i < Packet.HeaderSize; i++)
+                {
+					_builder.Append(_buffer[i]);
+                }
+
+				Console.WriteLine($"{_builder}");
+
 				UInt16 _packetID = _reader.ReadUInt16();
 				PacketType _packetType = (PacketType)_reader.ReadByte();
 				UInt16 _payloadSize = _reader.ReadUInt16();
-
+				Console.WriteLine($"Read packet type: {_packetType}");
 				//Extract packet from buffer
 				Packet _packet = new Packet
 				{
@@ -89,6 +98,7 @@ namespace Znet.Queue
 			bool _hasProcessed = false;
 			UInt16 _lastHeaderID = 0;
 			ZWriter _writer = new ZWriter();
+			List<Packet> _packetToRemove = new List<Packet>();
 
 			for(int i = 0; i < m_PendingQueue.Count; i++)
             {
@@ -96,31 +106,70 @@ namespace Znet.Queue
 
 				if(_packet.header.Type == PacketType.Packet)
                 {
+					Console.WriteLine("Packet detected type: Packet");
 					//Copy data to the messageReady
 					_hasProcessed = true;
 					_writer.WriteBytesInBuffer(_packet.data, ref _messagesReady);
 					_lastHeaderID = _packet.header.ID;
-
+					_packetToRemove.Add(_packet);
 				}
 				else if(_packet.header.Type == PacketType.FirstFragment)
                 {
-					_hasProcessed = true;
+					Console.WriteLine($"Packet detected type: {PacketType.FirstFragment}");
 					//Fragmented message case
+					//Find the other messages in the list, otherwise skip this message
 
-				}
+					List<Packet> _assembledMessage = new List<Packet>();
+					bool _isMessageComplete = false;
+
+					//Find corresponding message suite
+					for(int j = i; j < m_PendingQueue.Count; j++)
+                    {
+						if(m_PendingQueue[j].header.ID == _packet.header.ID + j)
+                        {
+							_assembledMessage.Add(m_PendingQueue[j]);
+							if (m_PendingQueue[j].header.Type == PacketType.LastFragment)
+                            {
+								_isMessageComplete = true;
+								break;
+							}
+                        }
+                    }
+
+                    if (_isMessageComplete)
+                    {
+						Console.WriteLine($"Message complete found in the queue. Assembling message.");
+
+						//Assemble message
+						_hasProcessed = true;
+
+						for(int k = 0; k < _assembledMessage.Count; k++)
+						{
+							_writer.WriteBytesInBuffer(_assembledMessage[k].data, ref _messagesReady);
+							_lastHeaderID = _assembledMessage[k].header.ID;
+							_packetToRemove.Add(_assembledMessage[k]);
+						}
+					}
+                }
+                else
+                {
+					//Fragment we can't handle now, skip
+                }
             }
 
 			//Update internal state
 			if(_hasProcessed)
             {
+				Console.WriteLine($"Process ended. Packets to remove from the queue: {_packetToRemove.Count}");
 				//Update last handled packet to refuse older next time
 				m_LastProcessed = _lastHeaderID;
 
-				//And clear the queue
-				m_PendingQueue.Clear();
+				//Remove the ready packets from the pending queue
+				for(int i = 0; i < _packetToRemove.Count; i++)
+                {
+					m_PendingQueue.Remove(_packetToRemove[i]);
+                }
             }
-
-
 			return _messagesReady;
         }
 	}

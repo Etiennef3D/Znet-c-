@@ -17,6 +17,7 @@ namespace Znet.Serialization
 
         public void Init(byte[] _buffer, int _readingPos = 0)
         {
+            Console.WriteLine($"Initializing reader at position: {_readingPos}");
             this._buffer = _buffer;
             _objects = new List<object>();
             m_CurrentReadPosition = _readingPos;

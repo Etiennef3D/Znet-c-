@@ -28,9 +28,9 @@ namespace Znet.Messages.Packet
 
     public enum PacketType
     {
-        Packet,
-        FirstFragment,
-        Fragment,
-        LastFragment
+        Packet = 0,
+        FirstFragment = 1,
+        Fragment = 2,
+        LastFragment = 3
     }
 }

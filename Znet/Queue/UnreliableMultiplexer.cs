@@ -114,10 +114,9 @@ namespace Znet.Queue
                 Console.WriteLine($"Serializing packet: {_packet}");
 
                 //Write packet header in the buffer
-                _writer.WritePacket(_packet, ref _buffer);
+                _writer.WritePacket(_packet, ref _currentSerializedSize, ref _buffer);
 
                 //Write packet data in the buffer
-                _currentSerializedSize += (_packet.header.PayloadSize + Packet.HeaderSize);
 
                 m_Queue.Remove(_packet);
                 Console.WriteLine($"Removing packet {_packet}. Remaining: {m_Queue.Count}");
