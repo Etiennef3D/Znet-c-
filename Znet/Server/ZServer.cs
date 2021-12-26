@@ -1,5 +1,4 @@
 ﻿using System;
-using Znet.Queue;
 using System.Net;
 using Znet.Messages;
 using Znet.Connections;
@@ -27,23 +26,15 @@ namespace Znet.Server
         private readonly Socket m_Socket;
         private readonly DatagramHandler m_DatagramHandler;
         private readonly IMessagePacker m_MessagePacker;
-        private readonly IQueue<Datagram> m_ReceivingQueue;
 
         public ZServer()
         {
             m_MessagePacker = new MessagePacker();
             m_DatagramHandler = new DatagramHandler();
             connectionManager = new ZConnectionManager();
-            m_ReceivingQueue = new DatagramReceivingQueue();
 
             m_buffer = new byte[MAX_BUFFER_SIZE];
             m_Socket = new Socket(AddressFamily.InterNetwork, SocketType.Dgram, ProtocolType.Udp);
-
-            Thread _receivingQueueThread = new Thread(() =>
-            {
-                m_ReceivingQueue.Start();
-            });
-            _receivingQueueThread.Start();
         }
 
         public void Start(int _port)

@@ -1,0 +1,416 @@
+Queuing message
+Fragment size: 1383
+Fragment size: 1383
+Fragment size: 1383
+Fragment size: 1383
+Fragment size: 1383
+Fragment size: 1383
+Fragment size: 1383
+Fragment size: 1383
+Fragment size: 1383
+Fragment size: 1383
+Fragment size: 1383
+Fragment size: 1383
+Fragment size: 1383
+Fragment size: 1383
+Fragment size: 1383
+Fragment size: 1383
+Fragment size: 1383
+Fragment size: 1383
+Fragment size: 1383
+Fragment size: 1383
+Fragment size: 1383
+Fragment size: 1383
+Fragment size: 1383
+Fragment size: 1383
+Fragment size: 1383
+Fragment size: 1383
+Fragment size: 1383
+Fragment size: 1383
+Fragment size: 1383
+Fragment size: 1383
+Fragment size: 1383
+Fragment size: 1383
+Multiplexer serialization. Messages to process in the queue: 32
+Serializing packet: Packet ID: 1, Type: FirstFragment, PayloadSize 1383
+Write packet id1. Current write position: 0
+Removing packet Packet ID: 1, Type: FirstFragment, PayloadSize 1383. Remaining: 31
+Buffer not large enough to serialize or serialization ended.
+OnDataReceived - Data size: 1388 
+Initializing reader at position: 0
+1011035
+Read packet type: FirstFragment
+Processing packet Packet ID: 1, Type: FirstFragment, PayloadSize 1383
+Received packet: Header ID: 1 - 65535
+Add packet 1 to the queue
+Multiplexer serialization. Messages to process in the queue: 31
+Serializing packet: Packet ID: 2, Type: Fragment, PayloadSize 1383
+Write packet id2. Current write position: 0
+Removing packet Packet ID: 2, Type: Fragment, PayloadSize 1383. Remaining: 30
+Buffer not large enough to serialize or serialization ended.
+OnDataReceived - Data size: 1388 
+Initializing reader at position: 0
+2021035
+Read packet type: Fragment
+Processing packet Packet ID: 2, Type: Fragment, PayloadSize 1383
+Received packet: Header ID: 2 - 1
+Add packet 2 to the queue
+Multiplexer serialization. Messages to process in the queue: 30
+Serializing packet: Packet ID: 3, Type: Fragment, PayloadSize 1383
+Write packet id3. Current write position: 0
+Removing packet Packet ID: 3, Type: Fragment, PayloadSize 1383. Remaining: 29
+Buffer not large enough to serialize or serialization ended.
+OnDataReceived - Data size: 1388 
+Initializing reader at position: 0
+3021035
+Read packet type: Fragment
+Processing packet Packet ID: 3, Type: Fragment, PayloadSize 1383
+Received packet: Header ID: 3 - 2
+Add packet 3 to the queue
+Multiplexer serialization. Messages to process in the queue: 29
+Serializing packet: Packet ID: 4, Type: Fragment, PayloadSize 1383
+Write packet id4. Current write position: 0
+Removing packet Packet ID: 4, Type: Fragment, PayloadSize 1383. Remaining: 28
+Buffer not large enough to serialize or serialization ended.
+OnDataReceived - Data size: 1388 
+Initializing reader at position: 0
+4021035
+Read packet type: Fragment
+Processing packet Packet ID: 4, Type: Fragment, PayloadSize 1383
+Received packet: Header ID: 4 - 3
+Add packet 4 to the queue
+Multiplexer serialization. Messages to process in the queue: 28
+Serializing packet: Packet ID: 5, Type: Fragment, PayloadSize 1383
+Write packet id5. Current write position: 0
+Removing packet Packet ID: 5, Type: Fragment, PayloadSize 1383. Remaining: 27
+Buffer not large enough to serialize or serialization ended.
+OnDataReceived - Data size: 1388 
+Initializing reader at position: 0
+5021035
+Read packet type: Fragment
+Processing packet Packet ID: 5, Type: Fragment, PayloadSize 1383
+Received packet: Header ID: 5 - 4
+Add packet 5 to the queue
+Multiplexer serialization. Messages to process in the queue: 27
+Serializing packet: Packet ID: 6, Type: Fragment, PayloadSize 1383
+Write packet id6. Current write position: 0
+Removing packet Packet ID: 6, Type: Fragment, PayloadSize 1383. Remaining: 26
+Buffer not large enough to serialize or serialization ended.
+OnDataReceived - Data size: 1388 
+Initializing reader at position: 0
+6021035
+Read packet type: Fragment
+Processing packet Packet ID: 6, Type: Fragment, PayloadSize 1383
+Received packet: Header ID: 6 - 5
+Add packet 6 to the queue
+Multiplexer serialization. Messages to process in the queue: 26
+Serializing packet: Packet ID: 7, Type: Fragment, PayloadSize 1383
+Write packet id7. Current write position: 0
+Removing packet Packet ID: 7, Type: Fragment, PayloadSize 1383. Remaining: 25
+Buffer not large enough to serialize or serialization ended.
+OnDataReceived - Data size: 1388 
+Initializing reader at position: 0
+7021035
+Read packet type: Fragment
+Processing packet Packet ID: 7, Type: Fragment, PayloadSize 1383
+Received packet: Header ID: 7 - 6
+Add packet 7 to the queue
+Multiplexer serialization. Messages to process in the queue: 25
+Serializing packet: Packet ID: 8, Type: Fragment, PayloadSize 1383
+Write packet id8. Current write position: 0
+Removing packet Packet ID: 8, Type: Fragment, PayloadSize 1383. Remaining: 24
+Buffer not large enough to serialize or serialization ended.
+OnDataReceived - Data size: 1388 
+Initializing reader at position: 0
+8021035
+Read packet type: Fragment
+Processing packet Packet ID: 8, Type: Fragment, PayloadSize 1383
+Received packet: Header ID: 8 - 7
+Add packet 8 to the queue
+Multiplexer serialization. Messages to process in the queue: 24
+Serializing packet: Packet ID: 9, Type: Fragment, PayloadSize 1383
+Write packet id9. Current write position: 0
+Removing packet Packet ID: 9, Type: Fragment, PayloadSize 1383. Remaining: 23
+Buffer not large enough to serialize or serialization ended.
+OnDataReceived - Data size: 1388 
+Initializing reader at position: 0
+9021035
+Read packet type: Fragment
+Processing packet Packet ID: 9, Type: Fragment, PayloadSize 1383
+Received packet: Header ID: 9 - 8
+Add packet 9 to the queue
+Multiplexer serialization. Messages to process in the queue: 23
+Serializing packet: Packet ID: 10, Type: Fragment, PayloadSize 1383
+Write packet id10. Current write position: 0
+Removing packet Packet ID: 10, Type: Fragment, PayloadSize 1383. Remaining: 22
+Buffer not large enough to serialize or serialization ended.
+OnDataReceived - Data size: 1388 
+Initializing reader at position: 0
+10021035
+Read packet type: Fragment
+Processing packet Packet ID: 10, Type: Fragment, PayloadSize 1383
+Received packet: Header ID: 10 - 9
+Add packet 10 to the queue
+Multiplexer serialization. Messages to process in the queue: 22
+Serializing packet: Packet ID: 11, Type: Fragment, PayloadSize 1383
+Write packet id11. Current write position: 0
+Removing packet Packet ID: 11, Type: Fragment, PayloadSize 1383. Remaining: 21
+Buffer not large enough to serialize or serialization ended.
+OnDataReceived - Data size: 1388 
+Initializing reader at position: 0
+11021035
+Read packet type: Fragment
+Processing packet Packet ID: 11, Type: Fragment, PayloadSize 1383
+Received packet: Header ID: 11 - 10
+Add packet 11 to the queue
+Multiplexer serialization. Messages to process in the queue: 21
+Serializing packet: Packet ID: 12, Type: Fragment, PayloadSize 1383
+Write packet id12. Current write position: 0
+Removing packet Packet ID: 12, Type: Fragment, PayloadSize 1383. Remaining: 20
+Buffer not large enough to serialize or serialization ended.
+OnDataReceived - Data size: 1388 
+Initializing reader at position: 0
+12021035
+Read packet type: Fragment
+Processing packet Packet ID: 12, Type: Fragment, PayloadSize 1383
+Received packet: Header ID: 12 - 11
+Add packet 12 to the queue
+Multiplexer serialization. Messages to process in the queue: 20
+Serializing packet: Packet ID: 13, Type: Fragment, PayloadSize 1383
+Write packet id13. Current write position: 0
+Removing packet Packet ID: 13, Type: Fragment, PayloadSize 1383. Remaining: 19
+Buffer not large enough to serialize or serialization ended.
+OnDataReceived - Data size: 1388 
+Initializing reader at position: 0
+13021035
+Read packet type: Fragment
+Processing packet Packet ID: 13, Type: Fragment, PayloadSize 1383
+Received packet: Header ID: 13 - 12
+Add packet 13 to the queue
+Multiplexer serialization. Messages to process in the queue: 19
+Serializing packet: Packet ID: 14, Type: Fragment, PayloadSize 1383
+Write packet id14. Current write position: 0
+Removing packet Packet ID: 14, Type: Fragment, PayloadSize 1383. Remaining: 18
+Buffer not large enough to serialize or serialization ended.
+OnDataReceived - Data size: 1388 
+Initializing reader at position: 0
+14021035
+Read packet type: Fragment
+Processing packet Packet ID: 14, Type: Fragment, PayloadSize 1383
+Received packet: Header ID: 14 - 13
+Add packet 14 to the queue
+Multiplexer serialization. Messages to process in the queue: 18
+Serializing packet: Packet ID: 15, Type: Fragment, PayloadSize 1383
+Write packet id15. Current write position: 0
+Removing packet Packet ID: 15, Type: Fragment, PayloadSize 1383. Remaining: 17
+Buffer not large enough to serialize or serialization ended.
+OnDataReceived - Data size: 1388 
+Initializing reader at position: 0
+15021035
+Read packet type: Fragment
+Processing packet Packet ID: 15, Type: Fragment, PayloadSize 1383
+Received packet: Header ID: 15 - 14
+Add packet 15 to the queue
+Multiplexer serialization. Messages to process in the queue: 17
+Serializing packet: Packet ID: 16, Type: Fragment, PayloadSize 1383
+Write packet id16. Current write position: 0
+Removing packet Packet ID: 16, Type: Fragment, PayloadSize 1383. Remaining: 16
+Buffer not large enough to serialize or serialization ended.
+OnDataReceived - Data size: 1388 
+Initializing reader at position: 0
+16021035
+Read packet type: Fragment
+Processing packet Packet ID: 16, Type: Fragment, PayloadSize 1383
+Received packet: Header ID: 16 - 15
+Add packet 16 to the queue
+Multiplexer serialization. Messages to process in the queue: 16
+Serializing packet: Packet ID: 17, Type: Fragment, PayloadSize 1383
+Write packet id17. Current write position: 0
+Removing packet Packet ID: 17, Type: Fragment, PayloadSize 1383. Remaining: 15
+Buffer not large enough to serialize or serialization ended.
+OnDataReceived - Data size: 1388 
+Initializing reader at position: 0
+17021035
+Read packet type: Fragment
+Processing packet Packet ID: 17, Type: Fragment, PayloadSize 1383
+Received packet: Header ID: 17 - 16
+Add packet 17 to the queue
+Multiplexer serialization. Messages to process in the queue: 15
+Serializing packet: Packet ID: 18, Type: Fragment, PayloadSize 1383
+Write packet id18. Current write position: 0
+Removing packet Packet ID: 18, Type: Fragment, PayloadSize 1383. Remaining: 14
+Buffer not large enough to serialize or serialization ended.
+OnDataReceived - Data size: 1388 
+Initializing reader at position: 0
+18021035
+Read packet type: Fragment
+Processing packet Packet ID: 18, Type: Fragment, PayloadSize 1383
+Received packet: Header ID: 18 - 17
+Add packet 18 to the queue
+Multiplexer serialization. Messages to process in the queue: 14
+Serializing packet: Packet ID: 19, Type: Fragment, PayloadSize 1383
+Write packet id19. Current write position: 0
+Removing packet Packet ID: 19, Type: Fragment, PayloadSize 1383. Remaining: 13
+Buffer not large enough to serialize or serialization ended.
+OnDataReceived - Data size: 1388 
+Initializing reader at position: 0
+19021035
+Read packet type: Fragment
+Processing packet Packet ID: 19, Type: Fragment, PayloadSize 1383
+Received packet: Header ID: 19 - 18
+Add packet 19 to the queue
+Multiplexer serialization. Messages to process in the queue: 13
+Serializing packet: Packet ID: 20, Type: Fragment, PayloadSize 1383
+Write packet id20. Current write position: 0
+Removing packet Packet ID: 20, Type: Fragment, PayloadSize 1383. Remaining: 12
+Buffer not large enough to serialize or serialization ended.
+OnDataReceived - Data size: 1388 
+Initializing reader at position: 0
+20021035
+Read packet type: Fragment
+Processing packet Packet ID: 20, Type: Fragment, PayloadSize 1383
+Received packet: Header ID: 20 - 19
+Add packet 20 to the queue
+Multiplexer serialization. Messages to process in the queue: 12
+Serializing packet: Packet ID: 21, Type: Fragment, PayloadSize 1383
+Write packet id21. Current write position: 0
+Removing packet Packet ID: 21, Type: Fragment, PayloadSize 1383. Remaining: 11
+Buffer not large enough to serialize or serialization ended.
+OnDataReceived - Data size: 1388 
+Initializing reader at position: 0
+21021035
+Read packet type: Fragment
+Processing packet Packet ID: 21, Type: Fragment, PayloadSize 1383
+Received packet: Header ID: 21 - 20
+Add packet 21 to the queue
+Multiplexer serialization. Messages to process in the queue: 11
+Serializing packet: Packet ID: 22, Type: Fragment, PayloadSize 1383
+Write packet id22. Current write position: 0
+Removing packet Packet ID: 22, Type: Fragment, PayloadSize 1383. Remaining: 10
+Buffer not large enough to serialize or serialization ended.
+OnDataReceived - Data size: 1388 
+Initializing reader at position: 0
+22021035
+Read packet type: Fragment
+Processing packet Packet ID: 22, Type: Fragment, PayloadSize 1383
+Received packet: Header ID: 22 - 21
+Add packet 22 to the queue
+Multiplexer serialization. Messages to process in the queue: 10
+Serializing packet: Packet ID: 23, Type: Fragment, PayloadSize 1383
+Write packet id23. Current write position: 0
+Removing packet Packet ID: 23, Type: Fragment, PayloadSize 1383. Remaining: 9
+Buffer not large enough to serialize or serialization ended.
+OnDataReceived - Data size: 1388 
+Initializing reader at position: 0
+23021035
+Read packet type: Fragment
+Processing packet Packet ID: 23, Type: Fragment, PayloadSize 1383
+Received packet: Header ID: 23 - 22
+Add packet 23 to the queue
+Multiplexer serialization. Messages to process in the queue: 9
+Serializing packet: Packet ID: 24, Type: Fragment, PayloadSize 1383
+Write packet id24. Current write position: 0
+Removing packet Packet ID: 24, Type: Fragment, PayloadSize 1383. Remaining: 8
+Buffer not large enough to serialize or serialization ended.
+OnDataReceived - Data size: 1388 
+Initializing reader at position: 0
+24021035
+Read packet type: Fragment
+Processing packet Packet ID: 24, Type: Fragment, PayloadSize 1383
+Received packet: Header ID: 24 - 23
+Add packet 24 to the queue
+Multiplexer serialization. Messages to process in the queue: 8
+Serializing packet: Packet ID: 25, Type: Fragment, PayloadSize 1383
+Write packet id25. Current write position: 0
+Removing packet Packet ID: 25, Type: Fragment, PayloadSize 1383. Remaining: 7
+Buffer not large enough to serialize or serialization ended.
+OnDataReceived - Data size: 1388 
+Initializing reader at position: 0
+25021035
+Read packet type: Fragment
+Processing packet Packet ID: 25, Type: Fragment, PayloadSize 1383
+Received packet: Header ID: 25 - 24
+Add packet 25 to the queue
+Multiplexer serialization. Messages to process in the queue: 7
+Serializing packet: Packet ID: 26, Type: Fragment, PayloadSize 1383
+Write packet id26. Current write position: 0
+Removing packet Packet ID: 26, Type: Fragment, PayloadSize 1383. Remaining: 6
+Buffer not large enough to serialize or serialization ended.
+OnDataReceived - Data size: 1388 
+Initializing reader at position: 0
+26021035
+Read packet type: Fragment
+Processing packet Packet ID: 26, Type: Fragment, PayloadSize 1383
+Received packet: Header ID: 26 - 25
+Add packet 26 to the queue
+Multiplexer serialization. Messages to process in the queue: 6
+Serializing packet: Packet ID: 27, Type: Fragment, PayloadSize 1383
+Write packet id27. Current write position: 0
+Removing packet Packet ID: 27, Type: Fragment, PayloadSize 1383. Remaining: 5
+Buffer not large enough to serialize or serialization ended.
+OnDataReceived - Data size: 1388 
+Initializing reader at position: 0
+27021035
+Read packet type: Fragment
+Processing packet Packet ID: 27, Type: Fragment, PayloadSize 1383
+Received packet: Header ID: 27 - 26
+Add packet 27 to the queue
+Multiplexer serialization. Messages to process in the queue: 5
+Serializing packet: Packet ID: 28, Type: Fragment, PayloadSize 1383
+Write packet id28. Current write position: 0
+Removing packet Packet ID: 28, Type: Fragment, PayloadSize 1383. Remaining: 4
+Buffer not large enough to serialize or serialization ended.
+OnDataReceived - Data size: 1388 
+Initializing reader at position: 0
+28021035
+Read packet type: Fragment
+Processing packet Packet ID: 28, Type: Fragment, PayloadSize 1383
+Received packet: Header ID: 28 - 27
+Add packet 28 to the queue
+Multiplexer serialization. Messages to process in the queue: 4
+Serializing packet: Packet ID: 29, Type: Fragment, PayloadSize 1383
+Write packet id29. Current write position: 0
+Removing packet Packet ID: 29, Type: Fragment, PayloadSize 1383. Remaining: 3
+Buffer not large enough to serialize or serialization ended.
+OnDataReceived - Data size: 1388 
+Initializing reader at position: 0
+29021035
+Read packet type: Fragment
+Processing packet Packet ID: 29, Type: Fragment, PayloadSize 1383
+Received packet: Header ID: 29 - 28
+Add packet 29 to the queue
+Multiplexer serialization. Messages to process in the queue: 3
+Serializing packet: Packet ID: 30, Type: Fragment, PayloadSize 1383
+Write packet id30. Current write position: 0
+Removing packet Packet ID: 30, Type: Fragment, PayloadSize 1383. Remaining: 2
+Buffer not large enough to serialize or serialization ended.
+OnDataReceived - Data size: 1388 
+Initializing reader at position: 0
+30021035
+Read packet type: Fragment
+Processing packet Packet ID: 30, Type: Fragment, PayloadSize 1383
+Received packet: Header ID: 30 - 29
+Add packet 30 to the queue
+Multiplexer serialization. Messages to process in the queue: 2
+Serializing packet: Packet ID: 31, Type: Fragment, PayloadSize 1383
+Write packet id31. Current write position: 0
+Removing packet Packet ID: 31, Type: Fragment, PayloadSize 1383. Remaining: 1
+Buffer not large enough to serialize or serialization ended.
+OnDataReceived - Data size: 1388 
+Initializing reader at position: 0
+31021035
+Read packet type: Fragment
+Processing packet Packet ID: 31, Type: Fragment, PayloadSize 1383
+Received packet: Header ID: 31 - 30
+Add packet 31 to the queue
+Multiplexer serialization. Messages to process in the queue: 1
+Serializing packet: Packet ID: 32, Type: LastFragment, PayloadSize 1383
+Write packet id32. Current write position: 0
+Removing packet Packet ID: 32, Type: LastFragment, PayloadSize 1383. Remaining: 0
+OnDataReceived - Data size: 1388 
+Initializing reader at position: 0
+32031035
+Read packet type: LastFragment
+Processing packet Packet ID: 32, Type: LastFragment, PayloadSize 1383
+Received packet: Header ID: 32 - 31
+Add packet 32 to the queue

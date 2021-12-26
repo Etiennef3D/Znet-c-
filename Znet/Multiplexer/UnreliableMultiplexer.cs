@@ -4,9 +4,9 @@ using Znet.Serialization;
 using Znet.Messages.Packet;
 using System.Collections.Generic;
 
-namespace Znet.Queue
+namespace Znet.Multiplexer
 {
-    public class UnreliableMultiplexer
+    public class UnreliableMultiplexer : IMultiplexer
     {
         public List<Packet> m_Queue = new List<Packet>();
         public UInt16 m_NextID = 0;

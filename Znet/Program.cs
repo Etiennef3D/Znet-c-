@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Text;
 using Znet.Messages.Packet;
-using Znet.Queue;
 
 namespace Znet
 {

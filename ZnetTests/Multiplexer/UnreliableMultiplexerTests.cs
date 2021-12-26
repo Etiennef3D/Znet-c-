@@ -1,11 +1,11 @@
 ﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Znet.Messages.Packet;
-using Znet.Queue;
+using Znet.Multiplexer;
 
 namespace ZnetTests.Multiplexer
 {
     [TestClass]
-    public class MultiplexerTests
+    public class UnreliableMultiplexerTests
     {
         [TestMethod]
         public void QueuingNormalMessages()

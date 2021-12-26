@@ -1,12 +1,12 @@
 ﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System;
 using Znet.Messages.Packet;
-using Znet.Queue;
+using Znet.Multiplexer;
 
 namespace ZnetTests.Multiplexer
 {
     [TestClass]
-    public class DemultiplexerTests
+    public class UnreliableDemultiplexerTests
     {
         [TestMethod]
         public void Initialize()
@@ -169,7 +169,9 @@ namespace ZnetTests.Multiplexer
             Assert.AreEqual(3, _demultiplexer.m_PendingQueue.Count);
 
             //Assemble messages and clear the queue
-            _demultiplexer.Process();
+            int _byteLength = _demultiplexer.Process().Length;
+
+            Assert.AreEqual(_byteLength, Packet.PacketMaxSize * 3);
 
             //Now the list should be empty
             Assert.AreEqual(0, _demultiplexer.m_PendingQueue.Count);
@@ -224,8 +226,7 @@ namespace ZnetTests.Multiplexer
 
             _demultiplexer.Process();
 
-            //TODO: Handle missing message parts
-            Assert.AreEqual(0, _demultiplexer.m_PendingQueue.Count);
+            Assert.AreEqual(2, _demultiplexer.m_PendingQueue.Count);
         }
     }
 }

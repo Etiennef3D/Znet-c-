@@ -4,7 +4,7 @@ using System.Text;
 using Znet.Messages.Packet;
 using Znet.Serialization;
 
-namespace Znet.Queue
+namespace Znet.Multiplexer
 {
     public class UnreliableDemultiplexer
     {
@@ -91,6 +91,7 @@ namespace Znet.Queue
 
 		/// <summary>
 		/// Get complete messages from the last call.
+		/// Process returns the received message
 		/// </summary>
 		public byte[] Process()
         {
@@ -99,7 +100,7 @@ namespace Znet.Queue
 			UInt16 _lastHeaderID = 0;
 			ZWriter _writer = new ZWriter();
 			List<Packet> _packetToRemove = new List<Packet>();
-
+			int _bufferTotalSize = 0;
 			for(int i = 0; i < m_PendingQueue.Count; i++)
             {
 				Packet _packet = m_PendingQueue[i];
@@ -112,6 +113,7 @@ namespace Znet.Queue
 					_writer.WriteBytesInBuffer(_packet.data, ref _messagesReady);
 					_lastHeaderID = _packet.header.ID;
 					_packetToRemove.Add(_packet);
+					_bufferTotalSize = _packet.header.PayloadSize + Packet.HeaderSize;
 				}
 				else if(_packet.header.Type == PacketType.FirstFragment)
                 {
@@ -121,9 +123,8 @@ namespace Znet.Queue
 
 					List<Packet> _assembledMessage = new List<Packet>();
 					bool _isMessageComplete = false;
-
 					//Find corresponding message suite
-					for(int j = i; j < m_PendingQueue.Count; j++)
+					for (int j = i; j < m_PendingQueue.Count; j++)
                     {
 						if(m_PendingQueue[j].header.ID == _packet.header.ID + j)
                         {
@@ -148,6 +149,7 @@ namespace Znet.Queue
 							_writer.WriteBytesInBuffer(_assembledMessage[k].data, ref _messagesReady);
 							_lastHeaderID = _assembledMessage[k].header.ID;
 							_packetToRemove.Add(_assembledMessage[k]);
+							_bufferTotalSize += _assembledMessage[k].header.PayloadSize + Packet.HeaderSize;
 						}
 					}
                 }
@@ -170,7 +172,11 @@ namespace Znet.Queue
 					m_PendingQueue.Remove(_packetToRemove[i]);
                 }
             }
-			return _messagesReady;
+			
+			byte[] _returnedMessage = new byte[_bufferTotalSize];
+			Array.Copy(_messagesReady, _returnedMessage, _bufferTotalSize);
+			Console.WriteLine($"Message total size: {_bufferTotalSize}");
+			return _returnedMessage;
         }
 	}
 }
